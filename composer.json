@@ -1,5 +1,5 @@
 {
-    "name": "oliverde8/Oweb-Framework",
+    "name": "oliverde8/oweb-framework",
     "description": "A simple yet powerful framework",
     "require": {
         "php": ">=5.3.0"
