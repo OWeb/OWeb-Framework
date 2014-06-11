@@ -1,0 +1,13 @@
+{
+    "name": "oliverde8/Oweb-Framework",
+    "description": "A simple yet powerful framework",
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "authors": [
+        {
+            "name": "Oliver de Cramer",
+            "homepage": "http://www.oliverde8.com/"
+        }
+    ]
+}
