@@ -1,6 +1,6 @@
 <?php
 /**
- * @author      Oliver de Cramer (oliverde8 at gmail.com)
+ * @author       Oliver de Cramer (oliverde8 at gmail.com)
  * @copyright    GNU GENERAL PUBLIC LICENSE
  *                     Version 3, 29 June 2007
  *
@@ -22,65 +22,73 @@
 namespace OWeb\manage;
 /**
  * Will load setting file(s)
- * OWeb core will ask it to load the main setting file. 
- * 
- * The settings manager seperates settings of different 
+ * OWeb core will ask it to load the main setting file.
+ *
+ * The settings manager seperates settings of different
  * Classes so that you can easily have acces to a setting
  * It can load multiple different files, for different Classes
- * 
+ *
  * @author oliver
  */
-class Settings extends \OWeb\utils\Singleton{
+class Settings extends \OWeb\utils\Singleton
+{
 
-	private $setting_files = array();
-	
+    private $setting_files = array();
+
     private $file_settings;
-	
-	private $class_setings;
-	
 
-	/**
-	 * The Setting array for you, in the default file or the file you asked it to check
-	 * 
-	 * @param String $asker The namen or Object of the one who asks for the settings
-	 * @return array()
-	 */
-    public function getSetting($asker, $explodedName = null){
-		
-		if(is_string($asker))
-			$name = $asker;
-		else if(is_object($asker))
-			$name = get_class($asker);
-		
-        if(!isset($this->class_setings[$name])){   
-			$fileMain = OWEB_CONFIG;
-			
-			//Loading the default file first.
-			if(!isset($this->file_settings[$fileMain]))
-				$this->file_settings[$fileMain] = $this->loadFile($fileMain);
+    private $class_setings;
 
-			$this->loadSecondaryFiles();
-			
-			if($explodedName == null)
-				if($asker instanceof \OWeb\types\NamedClass)
-					$explodedName = $asker->get_exploded_name();
-				else if(is_object($asker))
-					$explodedName = explode('\\', $name);
-			
-			$file = OWEB_CONFIG_DIR;
-			for($i = 0; $i < sizeof($explodedName); $i++){
-				$file .= '/'.$explodedName[$i];
-			}
-			$file .= '.ini';
-			
-			if(!isset($this->file_settings[$file]))
-				$this->file_settings[$file] = $this->loadFile($file);
-			
-			if(!isset($this->file_settings[$fileMain][$name]))
-				$this->file_settings[$fileMain][$name] = array();
-			
-			$this->class_setings[$name] = array_merge($this->file_settings[$file],$this->file_settings[$fileMain][$name]);
-		}
+
+    /**
+     * The Setting array for you, in the default file or the file you asked it to check
+     *
+     * @param String $asker The namen or Object of the one who asks for the settings
+     * @param string $explodedName
+     *
+     * @return array()
+     */
+    public function getSetting($asker, $explodedName = null)
+    {
+
+        if (is_string($asker))
+            $name = $asker;
+        else if (is_object($asker))
+            $name = get_class($asker);
+
+        if (!isset($this->class_setings[$name])) {
+            $fileMain = OWEB_CONFIG;
+
+            //Loading the default file first.
+            if (!isset($this->file_settings[$fileMain]))
+                $this->file_settings[$fileMain] = $this->loadFile($fileMain);
+
+            $this->loadSecondaryFiles();
+
+            if ($explodedName == null)
+                if ($asker instanceof \OWeb\types\NamedClass)
+                    $explodedName = $asker->get_exploded_name();
+                else if (is_object($asker))
+                    $explodedName = explode('\\', $name);
+
+            $file = OWEB_CONFIG_DIR;
+            for ($i = 0; $i < sizeof($explodedName); $i++) {
+                $file .= '/' . $explodedName[$i];
+            }
+            $file .= '.ini';
+
+            if (!isset($this->file_settings[$file]))
+                $this->file_settings[$file] = $this->loadFile($file);
+
+            if (!isset($this->file_settings[$fileMain][$name]))
+                $this->file_settings[$fileMain][$name] = array();
+
+            $this->class_setings[$name] = array_merge(
+                $this->file_settings[$file],
+                $this->file_settings[$fileMain][$name]
+            );
+        }
+
         return $this->class_setings[$name];
     }
 
@@ -88,37 +96,46 @@ class Settings extends \OWeb\utils\Singleton{
      * Recoveres the value of the setting for that class(object)
      *
      * @param mixed $asker The object or class that asks the Information
-     * @param $asked The name of the information to get
+     * @param       $asked The name of the information to get
+     *
      * @return mixed If information available string if not false
      */
-    public function getDefSettingValue($asker, $asked){
-		$settings = $this->getSetting($asker);
-		return isset($settings[$asked]) ? $settings[$asked] : null;
-	}
+    public function getDefSettingValue($asker, $asked)
+    {
+        $settings = $this->getSetting($asker);
+
+        return isset($settings[$asked]) ? $settings[$asked] : null;
+    }
 
     /**
      * Loads a different configuration file on top of the existing one
+     *
      * @param $file
+     *
      * @throws exceptions\Settings
      */
-    private function loadFile($file){
-		
-		$f = array();
-		if(file_exists($file))
-			try{
-				$f = parse_ini_file($file, true);
-			}catch(\Exception $ex){
-				throw new \OWeb\manage\exceptions\Settings("Failed to load Settings file : '$file'", 0, $ex);
-			}
-		return $f;
-        
+    private function loadFile($file)
+    {
+
+        $f = array();
+        if (file_exists($file))
+            try {
+                $f = parse_ini_file($file, true);
+            } catch (\Exception $ex) {
+                throw new \OWeb\manage\exceptions\Settings("Failed to load Settings file : '$file'", 0, $ex);
+            }
+
+        return $f;
+
     }
-	
-	private function loadSecondaryFiles(){
-		foreach($this->setting_files as $file){
-			if(!isset($this->file_settings[$file]))
-				$this->file_settings[$file] = $this->loadFile($file);
-		}
-	}
+
+    private function loadSecondaryFiles()
+    {
+        foreach ($this->setting_files as $file) {
+            if (!isset($this->file_settings[$file]))
+                $this->file_settings[$file] = $this->loadFile($file);
+        }
+    }
 }
+
 ?>
