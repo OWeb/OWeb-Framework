@@ -377,7 +377,7 @@ abstract class Controller extends NamedClass implements Configurable, InterfaceE
         } else if (file_exists($path2 . $path)) {
             $path = $path2 . $path;
         } else {
-            if ($ctr != '\OWeb\types\Controller') {
+            if ($ctr != 'OWeb\types\Controller') {
                 //Well this controller doesn't have a View let's see if the parent has a nice view to display
                 $this->prepareView(get_parent_class($ctr));
 

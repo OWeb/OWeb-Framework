@@ -93,6 +93,11 @@ require_once OWEB_DIR_MAIN . '/autoLoader.php';
 class OWeb
 {
 
+    /**
+     * @var autoLoader
+     */
+    private $autoLoader;
+
     //OWeb instance
     private static $instance = null;
 
@@ -139,7 +144,7 @@ class OWeb
         $this->_adresse = $adr;
 
         //Initializing AutoLoader.
-        new autoLoader();
+        $this->autoLoader = new autoLoader();
 
         //Initialize Events manager
         $this->manage_events = \OWeb\manage\Events::getInstance();
@@ -178,11 +183,13 @@ class OWeb
         } else {
             $this->mode = $this->manage_extensions->getExtension("core\modes\Page");
         }
+    }
+
+    public function init(){
         $this->mode->initMode();
 
         //Initialasation of OWeb DONE.
         $this->manage_events->sendEvent('Init@OWeb');
-
     }
 
     /**
@@ -302,6 +309,9 @@ class OWeb
         return self::$instance;
     }
 
+    public function registerNameSpace($namespace, $dir){
+        $this->autoLoader->registerNameSpace($namespace, $dir);
+    }
 
 }
 
