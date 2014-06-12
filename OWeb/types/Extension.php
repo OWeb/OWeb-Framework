@@ -163,6 +163,26 @@ abstract class Extension extends \OWeb\utils\Singleton
     {
         return isset($this->aliases[$name]) ? $this->aliases[$name] : null;
     }
+
+    /**
+     * Gets the value of a parameter
+     *
+     * @param $paramName String The name of the parameter of whom the value is asked
+     *
+     * @return mixed The value of the parameter or if parameter doesn't exist Null
+     */
+    public function getParam($paramName)
+    {
+        if (isset($this->params[$paramName]))
+            return $this->params[$paramName];
+        else
+            return null;
+    }
+
+    public function getParams()
+    {
+        return $this->params;
+    }
 }
 
 ?>

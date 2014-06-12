@@ -112,8 +112,8 @@ class Template extends \OWeb\types\ExtensionDependable
 
         ob_end_clean();
 
-        $this->content_heads = \OWeb\manage\Headers::getInstance()->toString();
-        \OWeb\manage\Headers::getInstance()->reset();
+        //$this->content_heads = \OWeb\manage\Headers::getInstance()->toString();
+       // \OWeb\manage\Headers::getInstance()->reset();
     }
 
     /**
@@ -122,7 +122,7 @@ class Template extends \OWeb\types\ExtensionDependable
     public function headers()
     {
         \OWeb\manage\Headers::getInstance()->display();
-        echo $this->content_heads;
+        //echo $this->content_heads;
     }
 
     /**

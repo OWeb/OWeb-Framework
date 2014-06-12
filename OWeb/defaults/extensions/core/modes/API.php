@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @author      Oliver de Cramer (oliverde8 at gmail.com)
+ * @author       Oliver de Cramer (oliverde8 at gmail.com)
  * @copyright    GNU GENERAL PUBLIC LICENSE
  *                     Version 3, 29 June 2007
  *
@@ -28,81 +28,84 @@ namespace Extension\core\modes;
  *
  * @author De Cramer Oliver
  */
-class API extends \OWeb\types\Extension implements ModeInterface{
-	
-	private $extension;
-	
-	public function initMode() {
-		
-		$ext_man = \OWeb\manage\Extensions::getInstance();
+class API extends \OWeb\types\Extension implements ModeInterface
+{
 
-		//On va voir quel extension on doit charger
+    private $extension;
+
+    public function initMode()
+    {
+
+        $ext_man = \OWeb\manage\Extensions::getInstance();
+
+        //On va voir quel extension on doit charger
         $get = \OWeb\OWeb::getInstance()->get_get();
-		
-		if (isset($get['ext'])) {
+
+        if (isset($get['ext'])) {
             $ext = $get['ext'];
         } else {
-            
+
         }
-		
-		try {
-		   $ext = str_replace("\\\\", "\\", $ext);
-		   $ext = str_replace(".", "\\", $ext);
-		   
-		   $this->extension = $ext_man->getExtension($ext);
-		   $this->extension->loadParams();
-		}
-		catch (\Exception $ex){
-			
-		}
-	}
 
-	public function display() {
-		
-		$result = '';
+        try {
+            $ext = str_replace("\\\\", "\\", $ext);
+            $ext = str_replace(".", "\\", $ext);
 
-		$get = \OWeb\OWeb::getInstance()->get_get();
-		
-		if(isset($get['action'])){
-			$r = $this->extension->doAction($get['action']);
-			if($r != null){
-				if(empty($result))
-					$result = $r;
-				elseif(is_array($result)){
-					$result[] = $r;
-				}else{
-					$r2 = $result; 
-					$result = array();
-					$result[] = $r2;
-					$result[] = $r;
-				}
-			}
-		}
+            $this->extension = $ext_man->getExtension($ext);
+            $this->extension->loadParams();
+        } catch (\Exception $ex) {
 
-		$i=1;
-		while (isset($get['action_'.$i])){
-			$r = $this->extension->doAction($get['action_'.$i]);
-			if($r != null){
-				if(empty($result))
-					$result = $r;
-				elseif(is_array($result)){
-					$result[] = $r;
-				}else{
-					$r2 = $result; 
-					$result = array();
-					$result[] = $r2;
-					$result[] = $r;
-				}
-			}
-			$i++;
-		}
-		
-		echo json_encode($result);	
-	}
+        }
+    }
 
-	public function init() {
-		
-	}
+    public function display()
+    {
+
+        $result = '';
+
+        $get = \OWeb\OWeb::getInstance()->get_get();
+
+        if (isset($get['action'])) {
+            $r = $this->extension->doAction($get['action']);
+            if ($r != null) {
+                if (empty($result))
+                    $result = $r;
+                elseif (is_array($result)) {
+                    $result[] = $r;
+                } else {
+                    $r2       = $result;
+                    $result   = array();
+                    $result[] = $r2;
+                    $result[] = $r;
+                }
+            }
+        }
+
+        $i = 1;
+        while (isset($get['action_' . $i])) {
+            $r = $this->extension->doAction($get['action_' . $i]);
+            if ($r != null) {
+                if (empty($result))
+                    $result = $r;
+                elseif (is_array($result)) {
+                    $result[] = $r;
+                } else {
+                    $r2       = $result;
+                    $result   = array();
+                    $result[] = $r2;
+                    $result[] = $r;
+                }
+            }
+            $i++;
+        }
+
+        echo json_encode($result);
+    }
+
+    public function init()
+    {
+
+    }
 }
 
 ?>
