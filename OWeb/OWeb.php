@@ -221,7 +221,6 @@ class OWeb
     {
 
         foreach ($extensions as $ex) {
-            echo $ex."\n";
             $this->manage_extensions->getExtension($ex);
         }
     }

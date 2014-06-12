@@ -53,7 +53,6 @@ class Controller extends \OWeb\utils\Singleton
      */
     public function initController(\OWeb\types\Controller $controller = null)
     {
-        echo "init : ".get_class($controller)."\n";
 
         if ($this->controller == null)
             return;
