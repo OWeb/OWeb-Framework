@@ -163,7 +163,9 @@ class OWeb
 
         //Initialize Setting Manager
         $this->manage_settings = \OWeb\manage\Settings::getInstance();
+    }
 
+    public function init(){
         //Initializing Managers DONE. Starting to recover OWeb General settings
         $this->loadSettings();
 
@@ -183,9 +185,7 @@ class OWeb
         } else {
             $this->mode = $this->manage_extensions->getExtension("core\modes\Page");
         }
-    }
 
-    public function init(){
         $this->mode->initMode();
 
         //Initialasation of OWeb DONE.
