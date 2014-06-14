@@ -33,7 +33,7 @@ class Caching extends Extension
 
     private $datas = array();
 
-    protected function init()
+    public  function __construct()
     {
         $this->cacheDir = OWEB_DIR_DATA . '/cache';
 
@@ -41,6 +41,10 @@ class Caching extends Extension
             !mkdir($this->cacheDir);
 
         $this->addAlias("getCache", "createCacheElement");
+    }
+
+    protected function init(){
+
     }
 
     /**
@@ -58,56 +62,33 @@ class Caching extends Extension
 
         $upToDate = true;
         $data     = null;
-        $lock = false;
-        $fp = null;
 
-        $filename = $this->cacheDir . '/' . $key . '.cache';
-        if (file_exists($filename)) {
-
-            $fp = fopen($filename, "r+");
-
-            if (flock($fp, LOCK_EX)) {
-                $lock = false;
-            }else{
-                $lock = true;
-            }
-
-            try{
-                $data = unserialize(fread($fp, filesize($filename)));
+        if (file_exists($this->cacheDir . '/' . $key . '.cache')) {
+            try {
+                /** @var Cache $data */
+                $data = unserialize(file_get_contents($this->cacheDir . '/' . $key . '.cache'));
 
                 if ($data->time + $timeout < time()){
                     $upToDate = false;
                 }
-            }catch (\Exception $e) {
+            } catch (\Exception $e) {
                 $upToDate = false;
             }
         } else {
             $upToDate = false;
         }
 
-        if(($upToDate || $lock) && $data != null){
+        if ($upToDate && $data != null) {
             $this->datas[$key] =  $data->data;
             return $this->datas[$key];
-        }else{
-            $newData = new Cache();
+        } else {
+            $data = new Cache();
 
-            $newData->data = call_user_func_array($callback, $params);
-            $newData->time = time();
-            if(!$lock){
-                if($fp == null){
-                    file_put_contents($filename, serialize($newData));
-                }else{
-                    fwrite($fp, serialize($newData));
-                    fflush($fp);
-                    flock($fp, LOCK_UN);
-                }
-
-                $this->datas[$key] = $data->data;
-
-                return $this->datas[$key];
-            }else{
-                return $newData->data;
-            }
+            $data->data = call_user_func_array($callback, $params);
+            $data->time = time();
+            file_put_contents($this->cacheDir . '/' . $key . '.cache', serialize($data));
+            $this->datas[$key] = $data->data;
+            return $this->datas[$key];
         }
     }
 }

@@ -46,7 +46,6 @@ abstract class Extension extends \OWeb\utils\Singleton
 
     public function OWeb_Init()
     {
-
         if (!empty($this->dependence)) {
             foreach ($this->dependence as $dep) {
 
