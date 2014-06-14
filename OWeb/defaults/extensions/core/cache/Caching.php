@@ -63,7 +63,7 @@ class Caching extends Extension
         $upToDate = true;
         $data     = null;
 
-        if (file_exists($this->cacheDir . '/' . $key . '.cache')) {
+        if (file_exists($this->cacheDir . $key . '.cache')) {
             try {
                 /** @var Cache $data */
                 $data = unserialize(file_get_contents($this->cacheDir . '/' . $key . '.cache'));
