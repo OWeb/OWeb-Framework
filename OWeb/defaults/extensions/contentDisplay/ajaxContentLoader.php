@@ -87,8 +87,8 @@ class ajaxContentLoader extends Extension{
         return array('headers' => $header, "content" => $this->content);
     }
 
-    public function getContentToUpdate($url, $timeout){
-        echo'<div id="ajaxContentLoader-'.$this->id.'"></div>';
+    public function getContentToUpdate($url, $timeout, $class=""){
+        echo'<div id="ajaxContentLoader-'.$this->id.'" class="'.$class.'"></div>';
 
         /**
          * @var \OWeb\utils\js\jquery\HeaderOnReadyManager $headersOnReady
