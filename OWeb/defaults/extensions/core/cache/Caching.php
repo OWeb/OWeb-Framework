@@ -58,33 +58,56 @@ class Caching extends Extension
 
         $upToDate = true;
         $data     = null;
+        $lock = false;
+        $fp = null;
 
-        if (file_exists($this->cacheDir . '/' . $key . '.cache')) {
-            try {
-                /** @var Cache $data */
-                $data = unserialize(file_get_contents($this->cacheDir . '/' . $key . '.cache'));
+        $filename = $this->cacheDir . '/' . $key . '.cache';
+        if (file_exists($filename)) {
+
+            $fp = fopen($filename, "r+");
+
+            if (flock($fp, LOCK_EX)) {
+                $lock = false;
+            }else{
+                $lock = true;
+            }
+
+            try{
+                $data = unserialize(fread($fp, filesize($filename)));
 
                 if ($data->time + $timeout < time()){
                     $upToDate = false;
                 }
-            } catch (\Exception $e) {
+            }catch (\Exception $e) {
                 $upToDate = false;
             }
         } else {
             $upToDate = false;
         }
 
-        if ($upToDate && $data != null) {
+        if(($upToDate || $lock) && $data != null){
             $this->datas[$key] =  $data->data;
             return $this->datas[$key];
-        } else {
-            $data = new Cache();
+        }else{
+            $newData = new Cache();
 
-            $data->data = call_user_func_array($callback, $params);
-            $data->time = time();
-            file_put_contents($this->cacheDir . '/' . $key . '.cache', serialize($data));
-            $this->datas[$key] = $data->data;
-            return $this->datas[$key];
+            $newData->data = call_user_func_array($callback, $params);
+            $newData->time = time();
+            if(!$lock){
+                if($fp == null){
+                    file_put_contents($filename, serialize($newData));
+                }else{
+                    fwrite($fp, serialize($newData));
+                    fflush($fp);
+                    flock($fp, LOCK_UN);
+                }
+
+                $this->datas[$key] = $data->data;
+
+                return $this->datas[$key];
+            }else{
+                return $newData->data;
+            }
         }
     }
 }
