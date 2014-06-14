@@ -173,7 +173,7 @@ class OWeb
         if (isset($this->_get['mode'])) {
             switch (strtoupper($this->_get['mode'])) {
                 case 'API':
-                    $this->mode = $this->manage_extensions->getExtension("core\modes\Api");
+                    $this->mode = $this->manage_extensions->getExtension("core\modes\API");
                     break;
                 case 'CTRACTION':
                     $this->mode = $this->manage_extensions->getExtension("core\modes\CtrAction");
