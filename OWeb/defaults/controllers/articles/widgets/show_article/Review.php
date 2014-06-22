@@ -1,6 +1,6 @@
 <?php
 /**
- * @author      Oliver de Cramer (oliverde8 at gmail.com)
+ * @author       Oliver de Cramer (oliverde8 at gmail.com)
  * @copyright    GNU GENERAL PUBLIC LICENSE
  *                     Version 3, 29 June 2007
  *
@@ -26,33 +26,32 @@ namespace Controller\articles\widgets\show_article;
  *
  * @author De Cramer Oliver
  */
-class Review extends \Controller\articles\Module{
-	
-	private $ext_bbCode;
-	
-	public function init() {
-		parent::init();
-		$this->ext_bbCode = \OWeb\manage\Extensions::getInstance()->getExtension('bbcode\SBBCodeParser');
-	}
+class Review extends \Controller\articles\Module
+{
 
-	public function onDisplay() {
-		
-		if($this->getParam('short')=="" || !is_bool($this->getParam('short')))
-			$this->view->short = false;
-		else 
-			$this->view->short = $this->getParam('short');
-		
-		if($this->getParam('image_level')=="" || !is_numeric($this->getParam('image_level'))){
-			$this->view->image_level = 2;
-		}else{
-			$this->view->image_level = $this->getParam('image_level');
-		}
-		
-		$this->view->ext_bbCode = $this->ext_bbCode;
-		$this->view->article = $this->getParam("article");
-		
-		
-	}	
+
+    public function init()
+    {
+        parent::init();
+        $this->addDependance('bbcode\SBBCodeParser');
+    }
+
+    public function onDisplay()
+    {
+
+        if ($this->getParam('short') == "" || !is_bool($this->getParam('short')))
+            $this->view->short = false;
+        else
+            $this->view->short = $this->getParam('short');
+
+        if ($this->getParam('image_level') == "" || !is_numeric($this->getParam('image_level'))) {
+            $this->view->image_level = 2;
+        } else {
+            $this->view->image_level = $this->getParam('image_level');
+        }
+
+        $this->view->article    = $this->getParam("article");
+    }
 }
 
 ?>

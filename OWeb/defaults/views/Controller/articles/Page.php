@@ -1,8 +1,4 @@
-<?php
-	$this->addHeader('2Collone.css',\OWeb\manage\Headers::css); 
-	$this->addHeader('articles.css',\OWeb\manage\Headers::css); 
-	$this->addHeader('jquery_theme/jquery-ui-1.9.2.custom.min.css',\OWeb\manage\Headers::css); 
-?>
+
 <div id="twoCollone">
 	<div>
 

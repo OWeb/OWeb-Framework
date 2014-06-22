@@ -12,7 +12,13 @@ SyntaxHighlighter.all();");
 
 $this->addHeader('syntaxHighlighter/shCoreDefault.css', \OWeb\manage\Headers::css);
 
-$this->form->display();
+?>
+<div class="uk-grid">
+<div class="uk-width-2-4">
+<?php  $this->form->display(); ?>
+</div>
+</div>
+<?php
 
 $tabs = $this->tabs;
 

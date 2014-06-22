@@ -19,20 +19,17 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see {http://www.gnu.org/licenses/}.
  */
-$this->addHeader('2Collone.css', \OWeb\manage\Headers::css);
+$this->addHeader('oweb.articles.css', \OWeb\manage\Headers::css);
 ?>
-<div id="twoCollone">
-    <div>
-        <div class="ColloneGauche">
-            <div>
-                <?php $this->displayController(); ?>
-            </div>
+<div class="uk-grid uk-grid-divider uk-margin-top">
+    <div class="uk-width-3-4">
+        <div>
+            <?php $this->displayController(); ?>
         </div>
-        <?php
-        $catTree = \OWeb\manage\SubViews::getInstance()->getSubView('\Controller\articles\widgets\ColloneDroite');
-        $catTree->addParams('cats', \Model\articles\Categories::getInstance())
-            ->display();
-        ?>
-        <div class="ColloneClean"></div>
     </div>
+    <?php
+    $catTree = \OWeb\manage\SubViews::getInstance()->getSubView('\Controller\articles\widgets\ColloneDroite');
+    $catTree->addParams('cats', \Model\articles\Categories::getInstance())
+        ->display();
+    ?>
 </div>

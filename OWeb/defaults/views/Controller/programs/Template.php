@@ -22,18 +22,15 @@
 
 $this->addHeader('2Collone.css', \OWeb\manage\Headers::css);
 ?>
-<div id="twoCollone">
-	<div>
-		<div class="ColloneGauche">
-			<div>
-                <?php $this->displayController(); ?>
-			</div>
-		</div>
-		<?php
-		$catTree = \OWeb\manage\SubViews::getInstance()->getSubView('\Controller\programs\widgets\ColloneDroite');
-		$catTree->addParams('cats', \Model\programs\Categories::getInstance())
-            ->display();
-		?>
-        <div class="ColloneClean"></div>
+<div class="uk-grid" >
+    <div class="uk-width-3-4">
+        <div>
+            <?php $this->displayController(); ?>
+        </div>
     </div>
+    <?php
+    $catTree = \OWeb\manage\SubViews::getInstance()->getSubView('\Controller\programs\widgets\ColloneDroite');
+    $catTree->addParams('cats', \Model\programs\Categories::getInstance())
+            ->display();
+    ?>
 </div>

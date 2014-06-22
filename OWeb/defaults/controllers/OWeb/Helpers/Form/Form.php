@@ -86,10 +86,6 @@ abstract class Form extends \Controller\OWeb\Helpers\HtmlElement{
 			$valid = $element->validate();			
 			$this->_isValid = $this->_isValid && $valid;
 			
-			echo "For : ".$element->getName();
-			print_r($values[$element->getName()]);
-			echo "\n\n";
-			
 			if($element instanceof Elements\InterfaceElementHolder){
 				$isCollection = $element instanceof Elements\Collection;
 				

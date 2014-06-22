@@ -6,50 +6,69 @@ $this->addHeader('syntaxHighlighter/shBrushJScript.js', \OWeb\manage\Headers::js
 $this->addHeader('syntaxHighlighter/shBrushPhp.js', \OWeb\manage\Headers::js);
 //$this->addHeader('syntaxHighlighter/shAutoloader.js', \OWeb\manage\Headers::javascript);
 
-\OWeb\utils\js\jquery\HeaderOnReadyManager::getInstance()->add("SyntaxHighlighter.config.bloggerMode = true;
-SyntaxHighlighter.defaults['toolbar'] = true;
-SyntaxHighlighter.all();");
+\OWeb\utils\js\jquery\HeaderOnReadyManager::getInstance()->add(
+    "SyntaxHighlighter.config.bloggerMode = true;
+    SyntaxHighlighter.defaults['toolbar'] = true;
+    SyntaxHighlighter.all();"
+);
 
 $this->addHeader('syntaxHighlighter/shCoreDefault.css', \OWeb\manage\Headers::css);
 
-$this->form->display();
+?>
+<div class="uk-grid">
+    <div class="uk-width-2-4">
+        <?php $this->form->display(); ?>
+    </div>
+</div>
 
+<?php
 $accordion = $this->accordion;
 
-$accordion->addSection('Section 1', '<p>Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer
-    ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit
-    amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut
-    odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.</p>');
+$accordion->addSection(
+    'Section 1',
+    '<p>Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer
+       ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit
+       amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut
+       odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.</p>'
+);
 
-$accordion->addSection('Section 2', '<p>Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
-    purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
-    velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
-    suscipit faucibus urna.</p>');
-		
-$accordion->addSection('Section 3', ' <p>
-    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
-    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
-    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis
-    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.
-    </p>
-    <ul>
-      <li>List item one</li>
-      <li>List item two</li>
-      <li>List item three</li>
-    </ul>');
+$accordion->addSection(
+    'Section 2',
+    '<p>Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
+       purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
+       velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
+       suscipit faucibus urna.</p>'
+);
 
-$accordion->addSection('Section 4', '<p>
-    Cras dictum. Pellentesque habitant morbi tristique senectus et netus
-    et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in
-    faucibus orci luctus et ultrices posuere cubilia Curae; Aenean lacinia
-    mauris vel est.
-    </p>
-    <p>
-    Suspendisse eu nisl. Nullam ut libero. Integer dignissim consequat lectus.
-    Class aptent taciti sociosqu ad litora torquent per conubia nostra, per
-    inceptos himenaeos.
-    </p>');
+$accordion->addSection(
+    'Section 3',
+    ' <p>
+       Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
+       Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
+       ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis
+       lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.
+       </p>
+       <ul>
+         <li>List item one</li>
+         <li>List item two</li>
+         <li>List item three</li>
+       </ul>'
+);
 
+$accordion->addSection(
+    'Section 4',
+    '<p>
+       Cras dictum. Pellentesque habitant morbi tristique senectus et netus
+       et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in
+       faucibus orci luctus et ultrices posuere cubilia Curae; Aenean lacinia
+       mauris vel est.
+       </p>
+       <p>
+       Suspendisse eu nisl. Nullam ut libero. Integer dignissim consequat lectus.
+       Class aptent taciti sociosqu ad litora torquent per conubia nostra, per
+       inceptos himenaeos.
+       </p>'
+);
 
 
 $accordion->display();
@@ -111,37 +130,37 @@ $this->form->display();
 $accordion = $this->accordion;
 
 $accordion->addSection('Section 1', '<p>Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer
-    ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit
-    amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut
-    odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.</p>');
+        ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit
+        amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut
+        odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.</p>');
 
 $accordion->addSection('Section 2', '<p>Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
-    purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
-    velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
-    suscipit faucibus urna.</p>');
+        purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
+        velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
+        suscipit faucibus urna.</p>');
 		
 $accordion->addSection('Section 3', ' <p>
-    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
-    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
-    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis
-    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.
+        Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
+        Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
+        ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis
+        lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.
     </p>
     <ul>
-      <li>List item one</li>
-      <li>List item two</li>
-      <li>List item three</li>
+        <li>List item one</li>
+        <li>List item two</li>
+        <li>List item three</li>
     </ul>');
 
 $accordion->addSection('Section 4', '<p>
-    Cras dictum. Pellentesque habitant morbi tristique senectus et netus
-    et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in
-    faucibus orci luctus et ultrices posuere cubilia Curae; Aenean lacinia
-    mauris vel est.
+        Cras dictum. Pellentesque habitant morbi tristique senectus et netus
+        et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in
+        faucibus orci luctus et ultrices posuere cubilia Curae; Aenean lacinia
+        mauris vel est.
     </p>
     <p>
-    Suspendisse eu nisl. Nullam ut libero. Integer dignissim consequat lectus.
-    Class aptent taciti sociosqu ad litora torquent per conubia nostra, per
-    inceptos himenaeos.
+        Suspendisse eu nisl. Nullam ut libero. Integer dignissim consequat lectus.
+        Class aptent taciti sociosqu ad litora torquent per conubia nostra, per
+        inceptos himenaeos.
     </p>');
 
 

@@ -77,7 +77,7 @@ $link->addParam('page', 'articles\Article')
 			<div id="article<?php echo $this->num; ?>_tabs-1" data-title="<?php echo $this->article->getTitle($lang); ?>"  >
 
 				<?php if($img_found)
-						echo '<img class="article_logo '.$img_class.'"src = "'.$img_url.'" />';
+						echo '<img class="article_logo uk-float-right '.$img_class.'"src = "'.$img_url.'" />';
 				?>
 
 				<p>

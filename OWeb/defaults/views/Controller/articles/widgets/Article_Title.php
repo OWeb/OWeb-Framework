@@ -16,22 +16,11 @@ $link->addParam('page', 'articles\Article')
 
 ?>
 
-<div class="ArticleTitle">
-	
-	<div>
-		<p class="date">
-			<?php echo $date_day.'<br/>'.$this->l($date_month).'<br/>'.$date_year; ?>
-		</p>
-		
-		<h2>
-			<a href="<?php echo $link; ?>" id="article<?php echo $this->article->getId() ?>_Title">
-			<?php echo $this->article->getTitle($lang); ?>
-			</a>
-		</h2>
-		<p class="by">
-			<?php echo $this->l('by'); ?> : Oliverde8
-		</p>
-	</div>
-	
-	<hr/>
-</div>
+<h1 class="uk-article-title">
+    <a href="<?php echo $link; ?>" id="article<?php echo $this->article->getId() ?>_Title">
+        <?php echo $this->article->getTitle($lang); ?>
+    </a>
+</h1>
+<p class="uk-article-meta">
+    <?php echo $date_day.'/'.$this->l($date_month).'/'.$date_year; ?> | <?php echo $this->l('by'); ?> : Oliverde8
+</p>

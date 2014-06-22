@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @author      Oliver de Cramer (oliverde8 at gmail.com)
+ * @author       Oliver de Cramer (oliverde8 at gmail.com)
  * @copyright    GNU GENERAL PUBLIC LICENSE
  *                     Version 3, 29 June 2007
  *
@@ -30,21 +30,23 @@ $id = clone $this->htmlIdentifier;
 $id->addHtmlClass('OWebForm_input_def');
 
 ?>
-	
-	<label <?=$id?> for="<?=$this->name?>"><?= $this->title ?></label>
+<div class="uk-width-4-10">
+    <label <?= $id ?> for="<?= $this->name ?>"><?= $this->title ?></label>
+</div>
+<div class="uk-width-5-10">
+    <select <?= $id ?>  name="<?= $this->name ?>">
 
-	<select <?=$id?>  name="<?=$this->name?>" >
+        <?php
 
-	<?php
+        foreach ($this->select as $select) {
+            $checked = $select[1] == $this->val ? 'selected' : '';
+            ?>
 
-	foreach($this->select as $select){
-	 $checked = $select[1] == $this->val ? 'selected' : '';
-	?>
+            <option <?= $this->htmlIdentifier ?> value="<?= $select[1] ?>" <?= $checked ?> > <?= $select[0] ?> </option>
 
-	<option <?=$this->htmlIdentifier?> value="<?=$select[1]?>" <?=$checked?> > <?=$select[0]?> </option>
+        <?php
 
-	<?php
-
-	}
-	?>
-	</select>
+        }
+        ?>
+    </select>
+</div>

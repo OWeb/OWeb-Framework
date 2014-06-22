@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @author      Oliver de Cramer (oliverde8 at gmail.com)
+ * @author       Oliver de Cramer (oliverde8 at gmail.com)
  * @copyright    GNU GENERAL PUBLIC LICENSE
  *                     Version 3, 29 June 2007
  *
@@ -31,18 +31,21 @@ $id = clone $this->htmlIdentifier;
 $id->addHtmlClass('OWebForm_input_def');
 
 ?>
+<div class="uk-width-4-10">
+    <label <?= $id ?> for="<?= $this->name ?>"><?= $this->title ?></label>
+</div>
+<div class="uk-width-5-10">
+    <?php
 
-	<label <?=$id?> for="<?=$this->name?>"><?= $this->title ?></label>
+    foreach ($this->radios as $radio) {
+        $checked = $radio[1] == $this->val ? 'checked' : '';
+        ?>
 
-	<?php
+        <input <?= $idRadio ?> type="<?= $this->type ?>" name="<?= $this->name ?>"
+                               value="<?= $radio[1] ?>" <?= $checked ?>>
+        <label <?= $idRadio ?> ><?= $radio[0] ?></label>
 
-	foreach($this->radios as $radio){
-	 $checked = $radio[1] == $this->val ? 'checked' : '';
-	?>
+    <?php
 
-	<input <?=$idRadio?> type="<?=$this->type?>" name="<?=$this->name?>" value="<?=$radio[1]?>" <?=$checked?>> 
-	<label <?=$idRadio?> ><?=$radio[0]?></label>
-
-	<?php
-
-	}
+    }?>
+</div>

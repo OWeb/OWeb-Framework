@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @author      Oliver de Cramer (oliverde8 at gmail.com)
+ * @author       Oliver de Cramer (oliverde8 at gmail.com)
  * @copyright    GNU GENERAL PUBLIC LICENSE
  *                     Version 3, 29 June 2007
  *
@@ -31,7 +31,10 @@ $id->addHtmlClass('OWebForm_input_def');
 
 ?>
 
-<label <?=$id?> for="<?=$this->name?>"><?= $this->title ?></label>
-<input <?=$id?> type="<?=$this->type?>" name="<?=$this->name?>" value="<?=$this->val?>">
+<div class="uk-width-4-10">
+    <label <?= $id ?> for="<?= $this->name ?>"><?= $this->title ?></label>
+</div>
 
-	
+<div class="uk-width-5-10">
+    <input <?= $id ?> type="<?= $this->type ?>" name="<?= $this->name ?>" value="<?= $this->val ?>">
+</div>

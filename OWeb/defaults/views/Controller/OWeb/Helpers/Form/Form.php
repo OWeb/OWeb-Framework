@@ -21,12 +21,12 @@
  *  along with this program.  If not, see {http://www.gnu.org/licenses/}.
  */
 
-$this->addHeader('Helpers.Form.css',\OWeb\manage\Headers::css); 
+$this->addHeader('oweb.helpers.forms.css',\OWeb\manage\Headers::css);
 
 ?>
 <div <?=$this->htmlIdentifier?>>
 
-	<form <?=$this->htmlIdentifier?> method="<?php echo $this->actionMode == OWeb\types\Controller::ACTION_GET ? 'get' : 'post' ?>">
+	<form class="uk-form uk-form-horizontal" <?=$this->htmlIdentifier?> method="<?php echo $this->actionMode == OWeb\types\Controller::ACTION_GET ? 'get' : 'post' ?>">
 
 	<?php
 

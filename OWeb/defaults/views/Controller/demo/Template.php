@@ -1,6 +1,6 @@
 <?php
 /**
- * @author      Oliver de Cramer (oliverde8 at gmail.com)
+ * @author       Oliver de Cramer (oliverde8 at gmail.com)
  * @copyright    GNU GENERAL PUBLIC LICENSE
  *                     Version 3, 29 June 2007
  *
@@ -20,19 +20,5 @@
  *  along with this program.  If not, see {http://www.gnu.org/licenses/}.
  */
 
-$this->addHeader('2Collone.css', \OWeb\manage\Headers::css);
-
 ?>
-
-<div id="twoCollone">
-	<div class="contenuMain">
-		<div >
-			<?php $this->displayController(); ?>
-		</div>
-        <div class="ColloneClean"></div>
-    </div>
-</div>
-
-
-
-?>
+    <?php $this->displayController(); ?>

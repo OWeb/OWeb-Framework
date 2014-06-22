@@ -82,19 +82,19 @@ $this->addHeader('widget_box.css', \OWeb\manage\Headers::css);
 ?>
 
 
-    <div class="box <?= $this->class; ?>">
+<div class="uk-panel uk-panel-box box <?= $this->class; ?>">
 
-        <div class="box_content">
+    <div class="box_content">
 
-            <?php $this->ctr->display() ?>
+        <?php $this->ctr->display() ?>
 
-        </div>
-
-        <?php if(!empty($this->SecondBoxContent)){ ?>
-        <div class="box_description">
-            <div class="box_description_content">
-                <?= $this->SecondBoxContent ?>
-            </div>
-        </div>
-        <?php } ?>
     </div>
+
+    <?php if(!empty($this->SecondBoxContent)){ ?>
+    <div class="box_description">
+        <div class="box_description_content">
+            <?= $this->SecondBoxContent ?>
+        </div>
+    </div>
+    <?php } ?>
+</div>

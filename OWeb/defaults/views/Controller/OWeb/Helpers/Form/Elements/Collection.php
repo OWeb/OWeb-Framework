@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @author      Oliver de Cramer (oliverde8 at gmail.com)
+ * @author       Oliver de Cramer (oliverde8 at gmail.com)
  * @copyright    GNU GENERAL PUBLIC LICENSE
  *                     Version 3, 29 June 2007
  *
@@ -29,21 +29,21 @@
 $id = clone $this->htmlIdentifier;
 $id->addHtmlClass('OWebForm_input_def');
 ?>
-	
-<h2 <?=$id?> for="<?=$this->name?>"><?= $this->title ?></h2>
+
+    <h2 <?= $id ?> for="<?= $this->name ?>"><?= $this->title ?></h2>
 <?php
 
 $i = 0;
-foreach($this->items as $item){
-	if(!empty($this->name)){
-		$oldName = $item->getName();
-		$item->setName($this->name.'['.$oldName.']['.$i.']');
-	}
-	$item->display();
-	if(!empty($this->name)){
-		$item->setName($oldName);
-	}
-	$i++;
+foreach ($this->items as $item) {
+    if (!empty($this->name)) {
+        $oldName = $item->getName();
+        $item->setName($this->name . '[' . $oldName . '][' . $i . ']');
+    }
+    $item->display();
+    if (!empty($this->name)) {
+        $item->setName($oldName);
+    }
+    $i++;
 }
 
 

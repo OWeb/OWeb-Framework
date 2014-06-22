@@ -2,7 +2,7 @@
 
 if(!empty($this->values)){
 	
-	echo '<h1>'.$this->l('tableOfContent').'</h1>';
+	echo '<h1 class="uk-h2">'.$this->l('Table of Content').'</h1>';
 	
 	$current = 0;
 
