@@ -21,10 +21,5 @@
  */
 namespace OWeb;
 
-/**
- *
- * @author De Cramer Oliver
- */
-class Exception extends \Exception{ }
 
-?>
+class Exception extends \Exception{ }
