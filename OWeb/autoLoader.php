@@ -33,12 +33,13 @@ require_once __DIR__ . '/types/autoloader/ClassInformation.php';
 
 
 use OWeb\types\autoloader\ClassInformation;
+use OWeb\types\autoloader\FileInformation;
 
 class AutoLoader
 {
 
     /**
-     * @var AutoLoader Instance of running OWeb
+     * @var AutoLoader Instance of the Autoloader
      */
     private static $instance = null;
 
@@ -47,12 +48,19 @@ class AutoLoader
      *
      * @var String[]
      */
-    private $modulePathes;
+    private $_modulePathes;
+
+    private $_pagePathes;
 
     /**
      * @var ClassInformation[]
      */
     private $_classInfos = array();
+
+    /**
+     * @var FileInformation[]
+     */
+    private $_fileInfos = array();
 
     /**
      * Creating the autoload and registering it so that it works
@@ -106,34 +114,52 @@ class AutoLoader
     {
         $info = $this->getClassInfo($class);
 
-        if($info->modulePath == null){
-            //OWeb framework main class, easy to load.
-            $path = __DIR__ .'/../'. $info->relativePath . '.php';
-            if(file_exists($path)){
-                require_once $path;
+        if ($info->modulePath == null) {
+            if ($info->explodedName[0] == 'Page') {
+                $found = false;
+                foreach ($this->_pagePathes as $path) {
+                    $file = $path . $info->relativePath . '.php';
 
-                $info->fullPath = $path;
-            }else
-                throw new Exception('[AutoLoad]The OWeb FrameWork class : '.$class.' couldn\'t be find at : '.$path);
-        }else{
+                    if (file_exists($file)) {
+                        require_once $file;
 
-            $found = false;
-            foreach($this->modulePathes as $path){
-                $file = $path.$info->modulePath.$info->relativePath.'.php';
-                if(file_exists($file)){
+                        $found = true;
+                        $info->fullPath = $file;
+                    }
+                    $info->possiblePaths[] = $file;
+                }
+
+                if (!$found) {
+                    //throw new Exception('[AutoLoad]The class : ' . $class . ' couldn\'t be find ');
+                }
+            } else {
+                //OWeb framework main class, easy to load.
+                $path = dirname(__DIR__) . $info->relativePath . '.php';
+                if (file_exists($path)) {
                     require_once $path;
 
-                    $found = true;
                     $info->fullPath = $path;
+                }// else
+                    //throw new Exception('[AutoLoad]The OWeb FrameWork class : ' . $class . ' couldn\'t be find at : ' . $path);
+            }
+        } else {
+
+            $found = false;
+            foreach ($this->_modulePathes as $path) {
+                $file = $path . $info->modulePath . $info->relativePath . '.php';
+                if (file_exists($file)) {
+                    require_once $file;
+
+                    $found = true;
+                    $info->fullPath = $file;
                 }
                 $info->possiblePaths[] = $file;
             }
 
-            if(!$found){
-                throw new Exception('[AutoLoad]The class : '.$class.' couldn\'t be find at : '.var_dump($info->possiblePaths[]));
+            if (!$found) {
+                //throw new Exception('[AutoLoad]The class : ' . $class . ' couldn\'t be find ');
             }
         }
-
     }
 
     /**
@@ -149,10 +175,11 @@ class AutoLoader
 
             $classInfo = new ClassInformation();
 
+            $classInfo->explodedName = $nameStructure;
+
             $classInfo->className = $class;
 
             $moduleFound = false;
-
             $firstPath = '';
 
             foreach ($nameStructure as $part) {
@@ -162,9 +189,9 @@ class AutoLoader
                         $firstPath .= '/' . $part;
                     } else {
                         //Module found so separate pathes to module path and relative to module path
-                        $moduleFound           = true;
-                        $classInfo->modulePath = $firstPath;
-                        $firstPath             = '';
+                        $moduleFound = true;
+                        $classInfo->modulePath = $firstPath . '/module';
+                        $firstPath = '';
                     }
                 else {
                     $firstPath .= '/' . $part;
@@ -179,4 +206,45 @@ class AutoLoader
         return $this->_classInfos[$class];
     }
 
-} 
+    /**
+     * Adds a path in which the autoloader will look for module elements
+     *
+     * @param $path
+     */
+    public function addModulePath($path)
+    {
+        $this->_modulePathes[] = $path;
+    }
+
+    /**
+     * Adds a path in which the autoloader will look for pages
+     *
+     * @param $path
+     */
+    public function addPagePath($path)
+    {
+        $this->_pagePathes[] = $path;
+    }
+
+    /**
+     * @param $controllerName
+     *
+     * @return FileInformation
+     */
+    public function getEquivalentPath($controllerName, $subDir)
+    {
+
+        $classInfo = $this->getClassInfo($controllerName);
+
+        foreach ($this->_modulePathes as $path) {
+            $file = $path . $classInfo->modulePath . '/' . $subDir . $classInfo->relativePath . '.php';
+
+            if (file_exists($file)) {
+                $classInfo->viewPath = $file;
+            }
+            $classInfo->possibleViewPaths[] = $file;
+        }
+
+        return $classInfo->viewPath;
+    }
+}
