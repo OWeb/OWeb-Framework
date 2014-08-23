@@ -24,13 +24,29 @@ namespace OWeb\manage;
 
 
 use OWeb\OWeb;
+use OWeb\web\displayMode\module\Extension\UrlGenerator;
+use OWeb\web\header\module\Extension\Header;
+use OWeb\web\header\module\Model\HeaderInterface;
 
-class Template {
+/**
+ * Handles the main template.
+ *
+ * @TODO add Error support
+ *
+ * @package OWeb\manage
+ */
+class Template{
 
     private $content;
 
+    /**
+     * @var UrlGenerator
+     */
+    private $urlGeneration;
+
     private $language;
 
+    /** @var Header $headers */
     private $content_heads = "";
 
     /**
@@ -38,6 +54,11 @@ class Template {
      * @param string $tmp The name of the template to load
      */
     function __construct($tmp='main') {
+
+        /** @var Header $headers */
+        $this->content_heads = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\web\header\module\Extension\Header');
+
+        $this->urlGeneration = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\web\displayMode\module\Extension\UrlGenerator');
 
         //\OWeb\manage\Events::getInstance()->sendEvent('DisplayTemplate_Start@OWeb\manage\Template');
         //$this->addDependance('core\url\Generator');
@@ -118,9 +139,21 @@ class Template {
      * Will display all the headers
      */
     public function headers(){
-        //\OWeb\manage\Headers::getInstance()->display();
-        echo $this->content_heads;
+        $this->content_heads->display();
     }
+
+    public function addHeader($header, $type = -1, $key = null){
+        $this->content_heads->addHeader($header, $type, $key);
+    }
+
+    public function url($page, $params=array()){
+        return $this->urlGeneration->getLink($page, $params);
+    }
+
+    public function getCurrentUrl(){
+        return $this->urlGeneration->getCurrentUrl();
+    }
+
 
     /**
      * Will display the main controller/page
@@ -129,15 +162,6 @@ class Template {
         //\OWeb\manage\Events::getInstance()->sendEvent('DisplayContent_Start@OWeb\manage\Template');
         echo $this->content;
         //\OWeb\manage\Events::getInstance()->sendEvent('DisplayContent_End@OWeb\manage\Template');
-    }
-
-    /**
-     * Adding a Header to the Page
-     * @param type $code The url, or code if the header.
-     * @param type $type The type of the header.
-     */
-    public function addHeader($code, $type){
-        //\OWeb\manage\Headers::getInstance()->addHeader($code, $type);
     }
 
 

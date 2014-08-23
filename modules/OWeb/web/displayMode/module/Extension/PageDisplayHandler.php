@@ -26,6 +26,12 @@ namespace OWeb\web\displayMode\module\Extension;
 use OWeb\manage\Template;
 use OWeb\OWeb;
 
+/**
+ * Handles the incoming parameters to display a web page.
+ *
+ * @TODO add error support
+ * @package OWeb\web\displayMode\module\Extension
+ */
 class PageDisplayHandler extends \OWeb\types\extension\Extension
 {
 
@@ -58,7 +64,7 @@ class PageDisplayHandler extends \OWeb\types\extension\Extension
             //$ctr = $ctrManager->loadController('Page\OWeb\errors\http\NotFound');
             //$ctr->loadParams();
         }
-*/
+        */
     }
 
     public function display()

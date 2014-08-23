@@ -49,7 +49,6 @@ class Dispatcher
      */
     public function dispatchEvent($event, $params = array())
     {
-
         if (isset ($this->_actions[$event])) {
             foreach ($this->_actions[$event] as $eventO) {
                 $eventO->doEvent($params);

@@ -25,8 +25,11 @@ namespace OWeb\types;
 
 use OWeb\Exception;
 use OWeb\OWeb;
+use OWeb\web\displayMode\module\Model\UrlInterface;
+use OWeb\web\header\module\Extension\Header;
+use OWeb\web\header\module\Model\HeaderInterface;
 
-abstract class Controller
+abstract class Controller implements HeaderInterface, UrlInterface
 {
 
     const ACTION_GET = 1;
@@ -105,6 +108,8 @@ abstract class Controller
         $this->_isPrimaryController = $primary;
 
         $this->dependence = new \SplDoublyLinkedList();
+
+        $this->addDependance('OWeb\web\header\module\Extension\Header');
     }
 
     /**

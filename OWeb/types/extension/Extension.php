@@ -23,6 +23,7 @@
 namespace OWeb\types\extension;
 
 use OWeb\manage\Extension as ExtensionManager;
+use OWeb\OWeb;
 
 abstract class Extension
 {
@@ -39,9 +40,15 @@ abstract class Extension
     protected $extension;
 
 
+    final public static function getClass(){
+        return get_class();
+    }
+
     final function __construct(ExtensionManager $extension)
     {
         $this->extension = $extension;
+
+        $this->dependence = new \SplDoublyLinkedList();
     }
 
     final public function OWeb_Init()
@@ -75,10 +82,52 @@ abstract class Extension
     abstract protected function ready();
 
 
-    protected function addDependance($plugin_name)
+    /**
+     * Will allow an extension to be loaded and give easy acces to the extension tools
+     *
+     * @param string $extension_name
+     *
+     * @throws \OWeb\Exception
+     */
+    protected function addDependance($extension_name)
     {
-        $dep = new Depandence($plugin_name);
-        $this->_dependence[] = $dep;
+        try {
+            if (is_object($extension_name)) {
+                $ext = $extension_name;
+                $extension_name = get_class($extension_name);
+            } else
+                $ext = OWeb::getInstance()->getManageExtensions()->getExtension($extension_name);
+
+            if ($ext) {
+                $this->dependence->push($ext);
+            } else {
+                throw new Exception("The extension: " . $extension_name . " Couldn't be loaded. The controller " . get_class($this) . " needs it to work");
+            }
+        } catch (Exception $exception) {
+            throw new Exception("The extension: " . $extension_name . " Couldn't be loaded. The controller " . get_class($this) . " needs it to work", 0, $exception);
+        }
+    }
+
+
+    /**
+     * Handles call to alias functions to the extensions the controller depends on
+     *
+     * @param $name
+     * @param $arguments
+     *
+     * @return mixed
+     * @throws \OWeb\Exception
+     */
+    public function __call($name, $arguments)
+    {
+        for ($this->dependence->rewind(); $this->dependence->valid(); $this->dependence->next()) {
+            $current = $this->dependence->current();
+            $alias = $current->getAlias($name);
+            if ($alias != null) {
+                return call_user_func_array(array($current, $alias), $arguments);
+            }
+        }
+        throw new \OWeb\Exception("The function: " . $name . " doesen't exist and couldn't be find in any extension to whom the plugin depends", 0);
     }
 
     /**

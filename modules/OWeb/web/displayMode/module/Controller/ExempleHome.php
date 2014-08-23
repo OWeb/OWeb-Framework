@@ -23,9 +23,15 @@
 namespace OWeb\web\displayMode\module\Controller;
 
 
+use OWeb\db\module\Model\DataBaseConnection;
 use OWeb\types\Controller;
 
-class ExempleHome extends Controller{
+/**
+ * Interface DataBaseConnection
+ *
+ * @method \PDO getDataBaseConnection() Returns the PDO connection to the database
+ */
+class ExempleHome extends Controller implements DataBaseConnection{
 
     /**
      * Called after construction when OWeb is ready.
@@ -44,6 +50,8 @@ class ExempleHome extends Controller{
      */
     protected function onDisplay()
     {
-        // TODO: Implement onDisplay() method.
+        //nothing to do
     }
+
+
 }
