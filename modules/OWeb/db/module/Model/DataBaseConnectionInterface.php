@@ -20,28 +20,13 @@
  *  along with this program.  If not, see {http://www.gnu.org/licenses/}.
  */
 
-namespace OWeb\db\module\Extension;
+namespace OWeb\db\module\Model;
 
-use OWeb\types\extension\Extension;
-
-abstract class AbstractConnection extends Extension{
-
-    protected $connection;
-    protected $done = false;
-    protected $prefix;
-
-    abstract public function get_Connection();
-
-    protected function init() {
-        $this->addAlias("getDataBaseConnection", "get_Connection");
-    }
-
-    protected function ready()
-    {
-    }
-
-    public function get_prefix(){
-        return $this->prefix;
-    }
-
-}
+/**
+ * Interface DataBaseConnection
+ *
+ * @package OWeb\db\module\Extension
+ *
+ * @method \PDO getDataBaseConnection() Returns the PDO connection to the database
+ */
+interface DataBaseConnectionInterface {}

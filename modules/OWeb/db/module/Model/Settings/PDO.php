@@ -20,28 +20,30 @@
  *  along with this program.  If not, see {http://www.gnu.org/licenses/}.
  */
 
-namespace OWeb\db\module\Extension;
+namespace OWeb\db\module\Model\Settings;
 
-use OWeb\types\extension\Extension;
+use OWeb\OWeb;
+use OWeb\settings\module\Extension\Settings;
+use OWeb\settings\module\Model\Setting;
+use OWeb\settings\module\Model\SimpleXMLElement;
 
-abstract class AbstractConnection extends Extension{
-
-    protected $connection;
-    protected $done = false;
-    protected $prefix;
-
-    abstract public function get_Connection();
-
-    protected function init() {
-        $this->addAlias("getDataBaseConnection", "get_Connection");
-    }
-
-    protected function ready()
+class PDO extends Setting {
+    function __construct()
     {
+        parent::__construct();
+        foreach($this as $key => $value){
+            if (!is_string($value))
+                $this->$key = ((string)$value);
+        }
     }
 
-    public function get_prefix(){
-        return $this->prefix;
-    }
 
-}
+    public $connection_type = 'mysql';
+    public $connection_host = 'localhost';
+    public $connection_dbName = '';
+
+    public $auth_name = 'root';
+    public $auth_pwd = '';
+    public $prefix = '';
+
+} 
