@@ -25,7 +25,13 @@ namespace Page;
 
 
 use OWeb\web\displayMode\module\Controller\ExempleHome;
+use OWeb\web\displayMode\module\Model\Link;
 
+/**
+ * Class home
+ *
+ * @package Page
+ */
 class home extends ExempleHome{
 
 }

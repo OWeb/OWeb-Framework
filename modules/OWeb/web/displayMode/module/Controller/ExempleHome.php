@@ -23,15 +23,18 @@
 namespace OWeb\web\displayMode\module\Controller;
 
 
-use OWeb\db\module\Model\DataBaseConnection;
+use OWeb\db\module\Model\DataBaseConnectionInterface;
 use OWeb\types\Controller;
 
 /**
  * Interface DataBaseConnection
  *
  * @method \PDO getDataBaseConnection() Returns the PDO connection to the database
+ * @method void addHeader(String $header, int $type = -1, String $key = null);
+ * @method Link url(string $page, array $params = array()) Returns a Link object to manipulate or display;
+ * @method Link getCurrentUrl() Returns a Link object for the current page;
  */
-class ExempleHome extends Controller implements DataBaseConnection{
+class ExempleHome extends Controller implements DataBaseConnectionInterface{
 
     /**
      * Called after construction when OWeb is ready.
@@ -40,7 +43,7 @@ class ExempleHome extends Controller implements DataBaseConnection{
      */
     public function init()
     {
-        $this->initSettings();
+
     }
 
     /**
