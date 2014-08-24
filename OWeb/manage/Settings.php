@@ -28,61 +28,12 @@ use OWeb\OWeb;
 
 class Settings {
 
-    private $_mainSettingFile = 'config.ini';
+    private $_mainSettingFile = 'config.xml';
 
     private $_settingFiles = array();
 
-    private $_fileSettings;
-
-    private $_classSetings;
-
-
-    /**
-     * The Setting array for you, in the default file or the file you asked it to check
-     *
-     * @param String $asker The namen or Object of the one who asks for the settings
-     *
-     * @return array()
-     */
-    public function getSetting($asker){
-
-        if(is_string($asker))
-            $name = $asker;
-        else if(is_object($asker))
-            $name = get_class($asker);
-
-        if(!isset($this->_classSetings[$name])){
-
-            $autoLoader = OWeb::getInstance()->getAutoLoader();
-
-            $path = $autoLoader->getEquivalentPath($asker, 'config');
-
-            $mainConfig = $this->loadFile($this->_mainSettingFile);
-
-            $otherSettings = array();
-            if($path != null){
-                $otherSettings = $this->loadFile($path);
-            }
-
-            if(!isset($mainConfig[$name]))
-                $mainConfig[$name] = array();
-
-            $this->_classSetings[$name] = array_merge($mainConfig[$name], $otherSettings);
-        }
-        return $this->_classSetings[$name];
-    }
-
-    /**
-     * Recoveres the value of the setting for that class(object)
-     *
-     * @param mixed $asker The object or class that asks the Information
-     * @param $asked The name of the information to get
-     *
-     * @return mixed If information available string if not false
-     */
-    public function getDefSettingValue($asker, $asked){
-        $settings = $this->getSetting($asker);
-        return isset($settings[$asked]) ? $settings[$asked] : null;
+    public function loadMainSettings(){
+        return $this->loadFile($this->_mainSettingFile);
     }
 
     /**
@@ -94,13 +45,14 @@ class Settings {
      *
      * @throws Exception
      */
-    private function loadFile($file){
+    public function loadFile($file){
 
         if(!isset($this->_settingFiles[$file])){
             $f = array();
-            if(file_exists($file))
+
+            if(file_exists(OWEB_DIR_CONFIG.'/'.$file))
                 try{
-                    $f = parse_ini_file($file, true);
+                    $f = simplexml_load_file(OWEB_DIR_CONFIG.'/'.$file);
                 }catch(\Exception $ex){
                     throw new Exception("Failed to load Settings file : '$file'", 0, $ex);
                 }

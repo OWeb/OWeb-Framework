@@ -33,9 +33,11 @@ define('OWEB_DIR', __DIR__);
 
 define('OWEB_VERSION', '0.4.0');
 
-if (!defined('OWEB_DIR_TEMPLATES')) define('OWEB_DIR_TEMPLATES', 'templates/');
+if (!defined('OWEB_DIR_TEMPLATES')) define('OWEB_DIR_TEMPLATES', 'templates');
 
 if (!defined('OWEB_DIR_DATA')) define('OWEB_DIR_DATA', 'sources/data');
+
+if (!defined('OWEB_DIR_CONFIG')) define('OWEB_DIR_CONFIG', 'config');
 
 // Les Fichier pour le HTML par Default
 if (!defined('OWEB_HTML_DIR_CSS')) define('OWEB_HTML_DIR_CSS', 'sources/css');
@@ -146,8 +148,16 @@ class OWeb
 
     public function init()
     {
+        $settings = $this->_manageSettings->loadMainSettings();
 
-        $this->_displayExtension = $this->_manageExtensions->getExtension('OWeb\web\displayMode\module\Extension\PageDisplayHandler');
+
+        if(array($settings->OWeb->extensions->extension)){
+            foreach($settings->OWeb->extensions->extension as $extension){
+                $this->_manageExtensions->getExtension((string)$extension['name']);
+            }
+        }
+
+        $this->_displayExtension = $this->_manageExtensions->getExtension((string)$settings->OWeb->display->extension['name']);
 
         $this->_manageEvents->dispatchEvent(CoreEvents::name_OWeb_init);
     }

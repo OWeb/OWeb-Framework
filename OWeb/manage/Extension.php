@@ -118,6 +118,9 @@ class Extension implements CoreEvents
         $this->_dispatcher->dispatchEvent('OWeb_Extension_preCreateExtension', $extensionName);
 
         try {
+            if(!class_exists($extensionName)){
+                throw new \OWeb\types\extension\Exception('Unknown Extension : '.$extensionName);
+            }
             $extension = new $extensionName($this);
 
             $this->_dispatcher->dispatchEvent('OWeb_Extension_postCreateExtension', $extensionName, $extension);

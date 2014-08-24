@@ -59,10 +59,6 @@ abstract class Controller implements HeaderInterface, UrlInterface
      */
     protected $dependence;
 
-    /**
-     * @var array The settings
-     */
-    protected $settings = array();
 
     /**
      * @var array
@@ -135,8 +131,6 @@ abstract class Controller implements HeaderInterface, UrlInterface
     {
         if ($ctr instanceof TemplateController) {
             $this->templateController = $ctr;
-
-            //array_merge($this->settings, $this->templateController->getSettings());
 
             /*$lang = $this->templateController->getLanguageStrings();
             if($lang != null)
@@ -290,23 +284,6 @@ abstract class Controller implements HeaderInterface, UrlInterface
     protected function registerEvent($eventName)
     {
         OWeb::getInstance()->getManageEvents()->registerEvent($eventName, $this);
-    }
-
-    /**
-     * This will read the settings file and get the data that for this controller
-     */
-    protected function initSettings(){
-        $this->initRecSettings(get_class($this));
-    }
-
-    private function initRecSettings($name){
-        $settingManager = OWeb::getInstance()->getManageSettings();
-        $this->settings = array_merge($this->settings, $settingManager->getSetting($name));
-
-        $parent = get_parent_class($name);
-
-        if ($parent != 'OWeb\types\Controller' && $parent != '\OWeb\types\Controller')
-            $this->initRecSettings($parent);
     }
 
     public function display($ctr = null){
