@@ -27,6 +27,7 @@ use OWeb\db\module\Model\PDOConnection as Connection;
 use OWeb\db\module\Model\Settings\PDO as PDOSettings;
 
 class PDOConnection extends AbstractConnection{
+
     /*
      * Creates a connection
      */
@@ -50,7 +51,7 @@ class PDOConnection extends AbstractConnection{
         $this->done = true;
     }
 
-    public function get_Connection() {
+    public function getConnection() {
         //Si la connection n'a pas encore ete etablis faut le faire.
         if (!$this->done)
             $this->startConnection();

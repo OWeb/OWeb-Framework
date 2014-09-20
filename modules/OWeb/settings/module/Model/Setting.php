@@ -35,10 +35,16 @@ abstract class Setting {
         /** @var SimpleXMLElement $settings */
         $settings = $settingsExt->getClassSetting($this);
 
-        if($settings != null){
-            foreach($settings->children() as $key => $value){
-                if(isset($this->$key))
-                    $this->$key = $value;
+        if ($settings != null){
+            foreach ($settings->children() as $key => $value){
+                if (isset($this->$key)) {
+                    $children = $value->children();
+                    if(empty($children)){
+                        $this->$key = (string)$value;
+                    }else{
+                        $this->$key = $value;
+                    }
+                }
             }
         }
     }

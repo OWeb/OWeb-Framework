@@ -30,10 +30,10 @@ abstract class AbstractConnection extends Extension{
     protected $done = false;
     protected $prefix;
 
-    abstract public function get_Connection();
+    abstract public function getConnection();
 
     protected function init() {
-        $this->addAlias("getDataBaseConnection", "get_Connection");
+        $this->addAlias("getDataBaseConnection", "getConnection");
     }
 
     protected function ready()

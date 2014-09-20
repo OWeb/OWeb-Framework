@@ -20,19 +20,40 @@
  *  along with this program.  If not, see {http://www.gnu.org/licenses/}.
  */
 
-namespace OWeb\db\module\Model\Settings;
+namespace OWeb\web\displayMode\module\Controller;
 
-use OWeb\settings\module\Model\Setting;
-use OWeb\settings\module\Model\SimpleXMLElement;
 
-class PDO extends Setting {
+use OWeb\db\module\Model\DataBaseConnectionInterface;
+use OWeb\types\Controller;
 
-    public $connection_type = 'mysql';
-    public $connection_host = 'localhost';
-    public $connection_dbName = '';
+/**
+ * Interface DataBaseConnection
+ *
+ * @method void addHeader(String $header, int $type = -1, String $key = null);
+ * @method Link url(string $page, array $params = array()) Returns a Link object to manipulate or display;
+ * @method Link getCurrentUrl() Returns a Link object for the current page;
+ */
+class ExampleHome extends Controller{
 
-    public $auth_name = 'root';
-    public $auth_pwd = '';
-    public $prefix = '';
+    /**
+     * Called after construction when OWeb is ready.
+     *
+     * @return void
+     */
+    public function init()
+    {
+        $this->addDependance('OWeb\db\module\Extension\PDOConnection');
+    }
 
-} 
+    /**
+     * Called before displaying the window
+     *
+     * @return mixed
+     */
+    protected function onDisplay()
+    {
+        $this->getDataBaseConnection();
+    }
+
+
+}

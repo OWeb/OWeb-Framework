@@ -20,19 +20,7 @@
  *  along with this program.  If not, see {http://www.gnu.org/licenses/}.
  */
 
-namespace OWeb\db\module\Model\Settings;
+/** @var \OWeb\web\displayMode\module\Controller\ExampleHome $this */
+?>
 
-use OWeb\settings\module\Model\Setting;
-use OWeb\settings\module\Model\SimpleXMLElement;
-
-class PDO extends Setting {
-
-    public $connection_type = 'mysql';
-    public $connection_host = 'localhost';
-    public $connection_dbName = '';
-
-    public $auth_name = 'root';
-    public $auth_pwd = '';
-    public $prefix = '';
-
-} 
+<h1>Exemple Controller</h1>

@@ -24,7 +24,7 @@ namespace Page;
 
 
 
-use OWeb\web\displayMode\module\Controller\ExempleHome;
+use OWeb\web\displayMode\module\Controller\ExampleHome;
 use OWeb\web\displayMode\module\Model\Link;
 
 /**
@@ -32,6 +32,6 @@ use OWeb\web\displayMode\module\Model\Link;
  *
  * @package Page
  */
-class home extends ExempleHome{
+class home extends ExampleHome{
 
 }
