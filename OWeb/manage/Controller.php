@@ -101,7 +101,7 @@ class Controller implements CoreEvents
     {
         try {
             if (!class_exists($name)) {
-                throw new Exception("The Controller doesen't exist", 0);
+                throw new Exception("The Controller doesen't exist : '$name'", 0);
             }
 
             $controller = new $name(true);
@@ -115,22 +115,6 @@ class Controller implements CoreEvents
         }
 
         return $this->_controller;
-    }
-
-    public function loadException($exception)
-    {
-        $templateManager = $this->_controller->getTemplateController();
-
-        unset($this->_controller);
-        $this->_controller = null;
-
-        $ctr = $this->loadController('Controller\OWeb\Exception');
-        $ctr->addParams('exception',$exception);
-        $ctr->init();
-        if ($templateManager != null) {
-            $ctr->applyTemplateController($templateManager);
-        }
-        return $ctr;
     }
 
     /**

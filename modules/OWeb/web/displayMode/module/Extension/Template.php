@@ -95,7 +95,7 @@ class Template extends \OWeb\types\extension\Extension
             ob_end_clean();
             ob_start();
 
-            $ctr = OWeb::getInstance()->getManageController()->loadException($e);
+            $ctr = OWeb::getInstance()->getManageController()->loadController('Page\errors\Error');
             OWeb::getInstance()->getManageController()->display();
         }
 
