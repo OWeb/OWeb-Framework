@@ -23,7 +23,6 @@
 namespace OWeb\web\displayMode\module\Extension;
 
 
-use OWeb\manage\Template;
 use OWeb\OWeb;
 
 /**
@@ -37,11 +36,13 @@ class PageDisplayHandler extends \OWeb\types\extension\Extension
 
     protected function init()
     {
-
+        $this->addDependance('OWeb\web\displayMode\module\Extension\Template');
     }
 
     protected function ready()
     {
+
+
         $oweb = OWeb::getInstance();
         $ctrManager = $oweb->getManageController();
 
@@ -53,22 +54,24 @@ class PageDisplayHandler extends \OWeb\types\extension\Extension
             $ctr = 'home';
         }
 
-        //try {
+        try {
             $ctr = str_replace("\\\\", "\\", $ctr);
             $ctr = str_replace(".", "\\", $ctr);
 
             $ctr = $ctrManager->loadController('Page\\' . $ctr);
             $ctr->loadParams();
 
-        /*} catch (\Exception $ex) {
-            //$ctr = $ctrManager->loadController('Page\OWeb\errors\http\NotFound');
-            //$ctr->loadParams();
+        } catch (\Exception $ex) {
+            $ctr = $ctrManager->loadController('Page\errors\http\NotFound');
+            $ctr->loadParams();
         }
-        */
+
     }
 
     public function display()
     {
-        $template = new Template('main');
+        /** @var Template $template */
+        $template = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\web\displayMode\module\Extension\Template');
+        $template->prepareDisplay('main');
     }
 }

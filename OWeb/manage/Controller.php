@@ -100,6 +100,10 @@ class Controller implements CoreEvents
     public function loadController($name)
     {
         try {
+            if (!class_exists($name)) {
+                throw new Exception("The Controller doesen't exist", 0);
+            }
+
             $controller = new $name(true);
             $this->_controller = $controller;
             if (!($controller instanceof \OWeb\types\Controller))
@@ -121,6 +125,7 @@ class Controller implements CoreEvents
         $this->_controller = null;
 
         $ctr = $this->loadController('Controller\OWeb\Exception');
+        $ctr->addParams('exception',$exception);
         $ctr->init();
         if ($templateManager != null) {
             $ctr->applyTemplateController($templateManager);
