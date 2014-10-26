@@ -22,6 +22,7 @@
 
 namespace OWeb;
 
+use OWeb\log\module\Extension\Log;
 use OWeb\manage\Controller;
 use OWeb\manage\Dispatcher;
 use OWeb\manage\Extension;
@@ -96,6 +97,11 @@ class OWeb
     private $_manageController;
 
     /**
+     * @var Log
+     */
+    private $_manageLogs;
+
+    /**
      * @var Settings
      */
     private $_manageSettings;
@@ -150,7 +156,6 @@ class OWeb
     {
         $settings = $this->_manageSettings->loadMainSettings();
 
-
         if(array($settings->OWeb->extensions->extension)){
             foreach($settings->OWeb->extensions->extension as $extension){
                 $this->_manageExtensions->getExtension((string)$extension['name']);
@@ -158,6 +163,8 @@ class OWeb
         }
 
         $this->_displayExtension = $this->_manageExtensions->getExtension((string)$settings->OWeb->display->extension['name']);
+
+        $this->_manageLogs = $this->_manageExtensions->getExtension('OWeb\log','Log');
 
         $this->_manageEvents->dispatchEvent(CoreEvents::name_OWeb_init);
     }
@@ -292,5 +299,16 @@ class OWeb
         return $this->_server;
     }
 
+    /**
+     * Logs using the active log extension
+     *
+     * @param mixed  $msg   Message to log
+     * @param int    $level Log level
+     * @param string $file  File to write logs into
+     */
+    public function log($msg, $level = Log::LEVEL_INFO, $file = null)
+    {
+        $this->_manageLogs->log($msg, $level, $file);
+    }
 
 }

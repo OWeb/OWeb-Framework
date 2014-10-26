@@ -101,10 +101,10 @@ abstract class Extension
             if ($ext) {
                 $this->dependence->push($ext);
             } else {
-                throw new Exception("The extension: " . $extension_name . " Couldn't be loaded. The controller " . get_class($this) . " needs it to work");
+                throw new Exception("The extension: " . $extension_name . " Couldn't be loaded. The extension " . get_class($this) . " needs it to work");
             }
         } catch (Exception $exception) {
-            throw new Exception("The extension: " . $extension_name . " Couldn't be loaded. The controller " . get_class($this) . " needs it to work", 0, $exception);
+            throw new Exception("The extension: " . $extension_name . " Couldn't be loaded. The extension " . get_class($this) . " needs it to work", 0, $exception);
         }
     }
 

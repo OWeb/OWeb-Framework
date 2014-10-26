@@ -22,11 +22,22 @@
 
 namespace OWeb\settings\module\Model;
 
-
 use OWeb\OWeb;
 use OWeb\settings\module\Extension\Settings;
 
-abstract class Setting {
+abstract class Setting{
+
+    private static $instances = array();
+
+    public static function getInstance()
+    {
+        $class = get_called_class();
+        if(!isset(self::$instances[$class]))
+        {
+            self::$instances[$class] = new $class();
+        }
+        return self::$instances[$class];
+    }
 
     function __construct()
     {

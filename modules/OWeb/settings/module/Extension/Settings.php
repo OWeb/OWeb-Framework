@@ -55,7 +55,6 @@ class Settings extends Extension{
                     $currentLevel = $currentLevel->$name;
                 else {
                     $this->_classSettings[$class] = null;
-                    echo $name;
                 }
             }
             $this->_classSettings[$class] = $currentLevel;
