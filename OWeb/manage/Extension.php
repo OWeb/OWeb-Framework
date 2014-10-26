@@ -84,8 +84,13 @@ class Extension implements CoreEvents
      *
      * @return TypeExtension | bool The extension or false if couldn't get it
      */
-    public function getExtension($extensionName)
+    public function getExtension($moduleName, $extensionName = null)
     {
+        if ($extensionName == null) {
+            $extensionName = $moduleName;
+        } else {
+            $extensionName = $moduleName . '\\module\\Extension\\' . $extensionName;
+        }
 
         if (!isset($this->_extensions[$extensionName])) {
             $extension = $this->createExtension($extensionName);

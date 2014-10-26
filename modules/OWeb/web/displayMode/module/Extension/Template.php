@@ -51,16 +51,16 @@ class Template extends \OWeb\types\extension\Extension
 
     protected function ready()
     {
-        $this->content_heads = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\web\header\module\Extension\Header');
-        $this->urlGeneration = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\web\displayMode\module\Extension\UrlGenerator');
+        $this->content_heads = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\web\header','Header');
+        $this->urlGeneration = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\web\displayMode', 'UrlGenerator');
     }
 
     public function prepareDisplay($tmp = 'main')
     {
         /** @var Header $headers */
-        $this->content_heads = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\web\header\module\Extension\Header');
+        $this->content_heads = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\web\header', 'Header');
 
-        $this->urlGeneration = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\web\displayMode\module\Extension\UrlGenerator');
+        $this->urlGeneration = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\web\displayMode', 'UrlGenerator');
 
 
         //First we prepare the page

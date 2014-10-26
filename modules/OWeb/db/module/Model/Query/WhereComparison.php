@@ -45,7 +45,7 @@ class WhereComparison {
             $this->value = $value;
         else {
             /** @var \OWeb\db\module\Model\PDOConnection $connection */
-            $connection = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\db\module\Extension\PDOConnection')->getConnection();
+            $connection = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\db','PDOConnection')->getConnection();
 
             $this->value = $connection->quote($value);
         }

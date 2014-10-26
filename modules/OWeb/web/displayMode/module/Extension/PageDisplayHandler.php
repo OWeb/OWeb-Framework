@@ -71,7 +71,7 @@ class PageDisplayHandler extends \OWeb\types\extension\Extension
     public function display()
     {
         /** @var Template $template */
-        $template = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\web\displayMode\module\Extension\Template');
+        $template = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\web\displayMode', 'Template');
         $template->prepareDisplay('main');
     }
 }

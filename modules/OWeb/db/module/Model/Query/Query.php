@@ -132,7 +132,7 @@ class Query {
 
     public function get(){
         /** @var \OWeb\db\module\Model\PDOConnection $connection */
-        $connection = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\db\module\Extension\PDOConnection')->getConnection();
+        $connection = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\db', 'PDOConnection')->getConnection();
 
         $this->results = array();
         foreach($connection->query($this->__tostring()) as $result){

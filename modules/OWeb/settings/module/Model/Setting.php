@@ -31,7 +31,7 @@ abstract class Setting {
     function __construct()
     {
         /** @var Settings $settingsExt */
-        $settingsExt = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\settings\module\Extension\Settings');
+        $settingsExt = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\settings', 'Settings');
         /** @var SimpleXMLElement $settings */
         $settings = $settingsExt->getClassSetting($this);
 

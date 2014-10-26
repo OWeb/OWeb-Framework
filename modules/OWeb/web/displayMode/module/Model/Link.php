@@ -43,7 +43,7 @@ class Link {
     function __construct($params=array()) {
         $this->params = $params;
 
-        $this->urlGenerator = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\web\displayMode\module\Extension\UrlGenerator');
+        $this->urlGenerator = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\web\displayMode', 'UrlGenerator');
     }
 
     /**
