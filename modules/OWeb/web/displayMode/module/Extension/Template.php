@@ -83,7 +83,7 @@ class Template extends \OWeb\types\extension\Extension
     /**
      * Will get the output of the current controller to display it later on.
      */
-    private function _prepareDisplay(){
+    protected function _prepareDisplay(){
         //We save the content so that if there is an error we don't show half displayed codes
         ob_start();
 
