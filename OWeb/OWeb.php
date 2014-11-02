@@ -22,6 +22,7 @@
 
 namespace OWeb;
 
+use OWeb\abs\displayMode\module\Extension\AbstractPageDisplayHandler;
 use OWeb\log\module\Extension\Log;
 use OWeb\manage\Controller;
 use OWeb\manage\Dispatcher;
@@ -87,7 +88,7 @@ class OWeb
     private $_manageExtensions;
 
     /**
-     * @var PageDisplayHandler
+     * @var AbstractPageDisplayHandler
      */
     private $_displayExtension;
 
@@ -152,17 +153,23 @@ class OWeb
         $this->_manageSettings = new Settings();
     }
 
-    public function init()
+    public function init($mode = null)
     {
         $settings = $this->_manageSettings->loadMainSettings();
 
         if(array($settings->OWeb->extensions->extension)){
             foreach($settings->OWeb->extensions->extension as $extension){
-                $this->_manageExtensions->getExtension((string)$extension['name']);
+                $extensionStatus = $this->_manageExtensions->getExtension((string)$extension['name']);
+                if (!$extensionStatus) {
+                    $this->log("Extension in settings couldn't be loaded : '".(string)$extension['name']."'");
+                }
             }
         }
 
         $this->_displayExtension = $this->_manageExtensions->getExtension((string)$settings->OWeb->display->extension['name']);
+        if ($mode != null) {
+            $this->_displayExtension->setMode($mode);
+        }
 
         $this->_manageLogs = $this->_manageExtensions->getExtension('OWeb\log','Log');
 
