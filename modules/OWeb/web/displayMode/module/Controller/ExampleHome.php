@@ -25,6 +25,7 @@ namespace OWeb\web\displayMode\module\Controller;
 
 use OWeb\db\module\Model\DataBaseConnectionInterface;
 use OWeb\types\Controller;
+use OWeb\types\utils\SimpleArray;
 
 /**
  * Interface DataBaseConnection

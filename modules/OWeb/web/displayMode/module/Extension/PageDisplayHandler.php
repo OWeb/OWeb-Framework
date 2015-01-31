@@ -41,18 +41,10 @@ class PageDisplayHandler extends \OWeb\types\extension\Extension
 
     protected function ready()
     {
-
-
         $oweb = OWeb::getInstance();
         $ctrManager = $oweb->getManageController();
 
-        $get = $oweb->getGet();
-
-        if (isset($get['page'])) {
-            $ctr = $get['page'];
-        } else {
-            $ctr = 'home';
-        }
+        $ctr = $oweb->getGet()->get('page', 'home');
 
         try {
             $ctr = str_replace("\\\\", "\\", $ctr);

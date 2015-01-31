@@ -28,6 +28,7 @@ use OWeb\manage\Dispatcher;
 use OWeb\manage\Extension;
 use OWeb\manage\Settings;
 use OWeb\types\event\CoreEvents;
+use OWeb\types\utils\SimpleArray;
 use OWeb\web\displayMode\module\Extension\PageDisplayHandler;
 
 define('OWEB_DIR', __DIR__);
@@ -129,19 +130,24 @@ class OWeb
          */
         $this->getRunTime();
 
-        /**
-         * Affecting base PHP variables
-         */
-        $this->_get = $get;
-        $this->_post = $post;
-        $this->_files = $files;
-        $this->_cookies = $cookies;
-        $this->_server = $server;
-        $this->_adresse = $adr;
-
         $this->_autoLoader = new AutoLoader();
         $this->_autoLoader->addModulePath(dirname(__DIR__) . '/modules');
         $this->_autoLoader->addPagePath(dirname(__DIR__) . '');
+
+        /**
+         * Affecting base PHP variables
+         */
+        $this->_get = new SimpleArray($get);
+        $this->_get->makeReadOnly();
+        $this->_post = new SimpleArray($post);
+        $this->_post->makeReadOnly();
+        $this->_files = new SimpleArray($files);
+        $this->_files->makeReadOnly();
+        $this->_cookies = new SimpleArray($cookies);
+        $this->_cookies->makeReadOnly();
+        $this->_server = new SimpleArray($server);
+        $this->_server->makeReadOnly();
+        $this->_adresse = $adr;
 
         $this->_manageEvents = new Dispatcher();
 
@@ -211,7 +217,7 @@ class OWeb
     }
 
     /**
-     * @return Array
+     * @return SimpleArray
      */
     public function getCookies()
     {
@@ -219,7 +225,7 @@ class OWeb
     }
 
     /**
-     * @return Array
+     * @return SimpleArray
      */
     public function getFiles()
     {
@@ -227,11 +233,27 @@ class OWeb
     }
 
     /**
-     * @return Array
+     * @return SimpleArray
      */
     public function getGet()
     {
         return $this->_get;
+    }
+
+    /**
+     * @return SimpleArray
+     */
+    public function getPost()
+    {
+        return $this->_post;
+    }
+
+    /**
+     * @return SimpleArray
+     */
+    public function getServer()
+    {
+        return $this->_server;
     }
 
     /**
@@ -280,23 +302,6 @@ class OWeb
     public function getManageSettings()
     {
         return $this->_manageSettings;
-    }
-
-
-    /**
-     * @return Array
-     */
-    public function getPost()
-    {
-        return $this->_post;
-    }
-
-    /**
-     * @return Array
-     */
-    public function getServer()
-    {
-        return $this->_server;
     }
 
     /**

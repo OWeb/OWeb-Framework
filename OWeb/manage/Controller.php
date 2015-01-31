@@ -68,8 +68,8 @@ class Controller implements CoreEvents
         $this->_dispatcher->dispatchEvent(Events::EVENT_preActionDispatch, $this->_controller);
 
         //gestion des Actions...
-        $source[] = OWeb::getInstance()->getGet();
-        $source[] = OWeb::getInstance()->getPost();
+        $source[] = OWeb::getInstance()->getGet()->getData();
+        $source[] = OWeb::getInstance()->getPost()->getData();
 
         foreach ($source as $get) {
             if (isset($get['action']))
