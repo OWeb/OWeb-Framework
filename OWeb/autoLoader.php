@@ -48,9 +48,9 @@ class AutoLoader
      *
      * @var String[]
      */
-    private $_modulePathes;
+    private $_modulePathes = array();
 
-    private $_pagePathes;
+    private $_pagePathes = array();
 
     /**
      * @var ClassInformation[]
@@ -114,7 +114,7 @@ class AutoLoader
     {
         $info = $this->getClassInfo($class);
 
-        if ($info->modulePath == null) {
+        if ($info->modulePath == null && !class_exists($class)) {
             if ($info->explodedName[0] == 'Page') {
                 $found = false;
                 foreach ($this->_pagePathes as $path) {
@@ -125,6 +125,7 @@ class AutoLoader
 
                         $found = true;
                         $info->fullPath = $file;
+                        return;
                     }
                     $info->possiblePaths[] = $file;
                 }
@@ -142,7 +143,7 @@ class AutoLoader
                 }// else
                     //throw new Exception('[AutoLoad]The OWeb FrameWork class : ' . $class . ' couldn\'t be find at : ' . $path);
             }
-        } else {
+        } else if(!class_exists($class)) {
 
             $found = false;
             foreach ($this->_modulePathes as $path) {
@@ -213,7 +214,7 @@ class AutoLoader
      */
     public function addModulePath($path)
     {
-        $this->_modulePathes[] = $path;
+        array_unshift($this->_modulePathes, $path);
     }
 
     /**
@@ -223,7 +224,7 @@ class AutoLoader
      */
     public function addPagePath($path)
     {
-        $this->_pagePathes[] = $path;
+        array_unshift($this->_pagePathes, $path);
     }
 
     /**

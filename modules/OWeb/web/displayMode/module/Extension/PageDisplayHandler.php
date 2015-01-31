@@ -23,20 +23,21 @@
 namespace OWeb\web\displayMode\module\Extension;
 
 
+use OWeb\abs\displayMode\module\Extension\AbstractPageDisplayHandler;
 use OWeb\OWeb;
 
 /**
  * Handles the incoming parameters to display a web page.
  *
- * @TODO add error support
  * @package OWeb\web\displayMode\module\Extension
  */
-class PageDisplayHandler extends \OWeb\types\extension\Extension
+class PageDisplayHandler extends AbstractPageDisplayHandler
 {
 
     protected function init()
     {
-        $this->addDependance('OWeb\web\displayMode\module\Extension\Template');
+        $this->addDependance('OWeb\abs\displayMode\module\Extension\AbstractTemplate');
+        $this->setMode(self::MODE_PAGE);
     }
 
     protected function ready()
@@ -50,11 +51,27 @@ class PageDisplayHandler extends \OWeb\types\extension\Extension
             $ctr = str_replace("\\\\", "\\", $ctr);
             $ctr = str_replace(".", "\\", $ctr);
 
-            $ctr = $ctrManager->loadController('Page\\' . $ctr);
+            switch ($this->getMode()) {
+                case self::MODE_PAGE :
+                case self::MODE_PAGE_NO_TEMPLATE :
+                    $ctr = $ctrManager->loadController('Page\\' . $ctr);
+                    break;
+                default :
+                    $ctr = $ctrManager->loadController($ctr);
+            }
+
             $ctr->loadParams();
 
         } catch (\Exception $ex) {
-            $ctr = $ctrManager->loadController('Page\errors\http\NotFound');
+            print_r($ex);
+            switch ($this->getMode()) {
+                case self::MODE_PAGE :
+                case self::MODE_PAGE_NO_TEMPLATE :
+                    $ctr = $ctrManager->loadController('Page\errors\http\NotFound');
+                    break;
+                default :
+                    $ctr = $ctrManager->loadController('\OWeb\web\displayMode\module\Controller\errors\http\NotFound');
+            }
             $ctr->loadParams();
         }
 
@@ -62,8 +79,15 @@ class PageDisplayHandler extends \OWeb\types\extension\Extension
 
     public function display()
     {
-        /** @var Template $template */
-        $template = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\web\displayMode', 'Template');
-        $template->prepareDisplay('main');
+        switch ($this->getMode()) {
+            case self::MODE_PAGE :
+            case self::MODE_CONTROLLER :
+                /** @var Template $template */
+                $template = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\abs\displayMode', 'AbstractTemplate');
+                $template->prepareDisplay('main');
+                break;
+            default :
+                OWeb::getInstance()->getManageController()->display();
+        }
     }
 }

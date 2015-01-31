@@ -20,18 +20,17 @@
  *  along with this program.  If not, see {http://www.gnu.org/licenses/}.
  */
 
-namespace OWeb\web\displayMode\module\Extension;
+namespace OWeb\abs\displayMode\module\Extension;
 
-use OWeb\abs\displayMode\module\Extension\AbstractTemplate;
 use OWeb\OWeb;
+use OWeb\types\extension\Extension;
 
 /**
  * Handles the incoming parameters to display a web page.
  *
- * @TODO add error support
  * @package OWeb\web\displayMode\module\Extension
  */
-class Template extends AbstractTemplate
+abstract class AbstractTemplate extends Extension
 {
 
     private $content;
@@ -41,27 +40,20 @@ class Template extends AbstractTemplate
      */
     private $urlGeneration;
 
-    /** @var Header $headers */
-    private $content_heads = "";
 
     protected function init()
     {
-        $this->addDependance('OWeb\web\header\module\Extension\Header');
-        $this->addDependance('OWeb\web\displayMode\module\Extension\UrlGenerator');
+        $this->addDependance('OWeb\abs\displayMode\module\Extension\UrlGenerator');
     }
 
     protected function ready()
     {
-        $this->content_heads = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\web\header','Header');
-        $this->urlGeneration = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\web\displayMode', 'UrlGenerator');
+        $this->urlGeneration = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\abs\displayMode', 'UrlGenerator');
     }
 
     public function prepareDisplay($tmp = 'main')
     {
-        /** @var Header $headers */
-        $this->content_heads = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\web\header', 'Header');
-
-        $this->urlGeneration = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\web\displayMode', 'UrlGenerator');
+        $this->urlGeneration = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\abs\displayMode', 'UrlGenerator');
 
 
         //First we prepare the page
@@ -108,17 +100,6 @@ class Template extends AbstractTemplate
 
     public function l($text){
         return $text;
-    }
-
-    /**
-     * Will display all the headers
-     */
-    public function headers(){
-        $this->content_heads->display();
-    }
-
-    public function addHeader($header, $type = -1, $key = null){
-        $this->content_heads->addHeader($header, $type, $key);
     }
 
     public function url($page, $params=array()){
