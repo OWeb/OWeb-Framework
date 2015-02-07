@@ -22,48 +22,62 @@
 
 namespace OWeb\db\module\Model\Query;
 
-/**
- * Class Where
- *
- * @package OWeb\db\module\Model\Query
- *
- */
-class Where {
 
-    /** @var Where[][]|Comparison[][] list */
-    private $expressions = array();
+class Join {
 
+    private $joinType;
 
-    /**
-     * @param Comparison | Where $comparaison The compare to do
-     *
-     * @return $this
-     */
-    public function addAnd($comparison){
-        $this->expressions[] =array('AND', $comparison);
-        return $this;
-    }
+    private $joinTable;
+
+    private $alias;
+
+    private $where;
 
     /**
-     * @param Comparison | Where $comparaison The compare to do
-     *
-     * @return $this
+     * @param string $alias     Alias of the table to join with
+     * @param string $joinTable Table name
+     * @param string $joinType  Type of join
+     * @param Where  $where     Condition to join on
      */
-    public function addOr($comparison){
-        $this->expressions[] =array('OR', $comparison);
-        return $this;
+    function __construct($alias, $joinTable, $joinType, Where $where)
+    {
+        $this->alias = $alias;
+        $this->joinTable = $joinTable;
+        $this->joinType = $joinType;
+        $this->where = $where;
     }
 
-    public function getExpressions() {
-        return $this->expressions;
+    /**
+     * @return mixed
+     */
+    public function getAlias()
+    {
+        return $this->alias;
     }
 
-    public function __toString(){
-        $sql = "(".(string)$this->expressions[0][1];
-
-        for($i = 1; $i < count($this->expressions); $i++){
-            $sql .= " ".$this->expressions[$i][0]." ".((string)$this->expressions[$i][1]);
-        }
-        return $sql.")";
+    /**
+     * @return mixed
+     */
+    public function getJoinTable()
+    {
+        return $this->joinTable;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getJoinType()
+    {
+        return $this->joinType;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWhere()
+    {
+        return $this->where;
+    }
+
+
 } 

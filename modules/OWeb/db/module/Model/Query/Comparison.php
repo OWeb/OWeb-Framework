@@ -23,16 +23,56 @@
 namespace OWeb\db\module\Model\Query;
 
 
-class Expression {
+use OWeb\OWeb;
 
-    private $content;
+class Comparison {
 
-    function __construct($content)
+    const OPERATOR_IN = 'IN';
+
+    private $column;
+    private $operator;
+    private $value;
+
+    /**
+     * @param string $column      Column to compare
+     * @param string $operator    Operator to use
+     * @param mixed  $value       Value
+     */
+    function __construct($column, $operator, $value)
     {
-        $this->content = $content;
+        $this->column = $column;
+        $this->operator = $operator;
+        $this->value = $value;
     }
 
-    public function __toString(){
-        return $this->content;
+    /**
+     * Get column name
+     *
+     * @return string
+     */
+    public function getColumn()
+    {
+        return $this->column;
     }
-}
+
+    /**
+     * Get Operator
+     *
+     * @return string
+     */
+    public function getOperator()
+    {
+        return $this->operator;
+    }
+
+    /**
+     * Value to compare with. For some cases it might be an array
+     *
+     * @return mixed
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+} 

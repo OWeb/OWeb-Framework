@@ -21,12 +21,13 @@
  */
 
 namespace OWeb\db\module\Model;
+use OWeb\db\module\Extension\PDOConnection;
 
 /**
  * Interface DataBaseConnection
  *
  * @package OWeb\db\module\Extension
  *
- * @method \PDO getDataBaseConnection() Returns the PDO connection to the database
+ * @method PDOConnection getDataBaseConnection() Returns the PDO connection to the database
  */
 interface DataBaseConnectionInterface {}

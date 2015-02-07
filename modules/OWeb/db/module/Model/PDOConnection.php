@@ -23,6 +23,97 @@
 namespace OWeb\db\module\Model;
 
 
+use OWeb\db\module\Model\Query\Comparison;
+use OWeb\db\module\Model\Query\Query;
+use OWeb\db\module\Model\Query\Select;
+use OWeb\db\module\Model\Query\Where;
+
 class PDOConnection extends \PDO{
 
+    public function prepare ($statement, $driver_options = array()) {
+        return parent::prepare($statement, $driver_options);
+    }
+
+    public function exec($statement)
+    {
+        return parent::exec($statement);
+    }
+
+    public function query($statement)
+    {
+        return parent::exec($statement);
+    }
+
+    public function prepareStatement($statement) {
+        if ($statement instanceof Query) {
+            // Need to make string;
+            if ($statement instanceof Select) {
+                return $this->buildSelectQuery($statement);
+            }
+        } else {
+            return $statement;
+        }
+    }
+
+    protected function buildSelectQuery(Select $selectQuery)
+    {
+        $parts = array();
+        foreach ($selectQuery->getSelect() as $alias => $columnInfo) {
+            $column = ((!is_null($columnInfo[1])) ? $columnInfo[1].'.' : '').$columnInfo[0];
+            $parts[] = "`$column` AS `$alias`";
+        }
+
+        $query = "SELECT ".implode(',', $parts)."\n";
+
+        $parts = array();
+        foreach ($selectQuery->getFrom() as $alias => $tableName) {
+            $parts[] = "`$tableName` `$alias`";
+        }
+        $query .= implode(',', $parts)."\n";
+
+        foreach ($selectQuery->getJoins() as $alias => $join) {
+            $query .= "LEFT JOIN {$join->getJoinTable()} {$join->getAlias()}\n";
+            $query .= "\t ON {$this->buildWhere($join->getWhere())}\n";
+        }
+
+        $query .= 'WHERE '.$this->buildWhere($selectQuery->getWhere());
+
+        return $query;
+    }
+
+    protected function buildWhere(Where $where) {
+        $expressions = $where->getExpressions();
+
+        if (empty($expressions)) {
+            return "";
+        }
+
+        $sql = "(".$this->buildExpression($expressions[0][1]);
+
+        for($i = 1; $i < count($expressions); $i++){
+            $sql .= " ".$expressions[$i][0]." ".$this->buildExpression($expressions[$i][1]);
+        }
+        return $sql.")";
+    }
+
+    protected function buildExpression($expression) {
+        if ($expression instanceof Where) {
+            return $this->buildWhere($expression);
+        } else if ($expression instanceof Comparison) {
+            if ($expression->getOperator() == Comparison::OPERATOR_IN) {
+                if (is_array($expression->getValue())) {
+                    $quoted = array();
+                    foreach($expression->getValue() as $value) {
+                        $quoted[$value] = $this->quote($value);
+                    }
+                    $value = '('.implode(',', $quoted).')';
+                } else {
+                    $value = '('.$this->quote($expression->getValue()).')';
+                }
+            } else {
+                $value = $this->quote($expression->getValue());
+            }
+            return $expression->getColumn()." ".$expression->getOperator()." ".$value;
+        }
+    }
 } 

@@ -24,6 +24,10 @@ namespace OWeb\web\displayMode\module\Controller;
 
 
 use OWeb\db\module\Model\DataBaseConnectionInterface;
+use OWeb\db\module\Model\PDOConnection;
+use OWeb\db\module\Model\Query\Comparison;
+use OWeb\db\module\Model\Query\Select;
+use OWeb\db\module\Model\Query\Where;
 use OWeb\types\Controller;
 use OWeb\types\utils\SimpleArray;
 
@@ -33,6 +37,8 @@ use OWeb\types\utils\SimpleArray;
  * @method void addHeader(String $header, int $type = -1, String $key = null);
  * @method Link url(string $page, array $params = array()) Returns a Link object to manipulate or display;
  * @method Link getCurrentUrl() Returns a Link object for the current page;
+ *
+ * @method PDOConnection getDataBaseConnection() Returns the PDO connection to the database
  */
 class ExampleHome extends Controller{
 
@@ -53,7 +59,8 @@ class ExampleHome extends Controller{
      */
     protected function onDisplay()
     {
-        $this->getDataBaseConnection();
+        $pdo = $this->getDataBaseConnection();
+
     }
 
 
