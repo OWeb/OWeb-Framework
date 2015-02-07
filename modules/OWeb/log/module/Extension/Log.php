@@ -26,6 +26,7 @@ namespace OWeb\log\module\Extension;
 use OWeb\log\module\Model\Settings;
 use OWeb\OWeb;
 use OWeb\types\extension\Extension;
+use OWeb\types\utils\File;
 
 class Log extends Extension{
 
@@ -68,10 +69,7 @@ class Log extends Extension{
 
         $logDir = $settings->path;
 
-        if (!is_dir($logDir)) {
-            mkdir($logDir, 0777, true);
-            chmod($logDir, 0777);
-        }
+        File::mkDir($logDir, 0777, true);
 
         $logFile = $logDir.'/'.$file.'.log';
 

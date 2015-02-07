@@ -51,6 +51,7 @@ class ExampleHome extends Controller{
     public function init()
     {
         $this->addDependance('OWeb\db\module\Extension\PDOConnection');
+        $this->addDependance('OWeb\abs\cache\module\Extension\AbstractCache');
     }
 
     /**
@@ -61,8 +62,6 @@ class ExampleHome extends Controller{
     protected function onDisplay()
     {
         $pdo = $this->getDataBaseConnection();
-
-        throw new Exception('toto');
 
     }
 

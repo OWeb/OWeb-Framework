@@ -97,7 +97,7 @@ abstract class DbResource {
     }
 
     /**
-     * Executes a query on the table, if the table doesen't exits yet creates it.
+     * Executes a query on the table/tables, if the table doesen't exits yet creates it.
      * On non SQL systems will just do the query and return empty results
      *
      * @param Query $query
