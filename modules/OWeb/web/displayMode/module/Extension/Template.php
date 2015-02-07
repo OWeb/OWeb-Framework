@@ -23,6 +23,7 @@
 namespace OWeb\web\displayMode\module\Extension;
 
 use OWeb\abs\displayMode\module\Extension\AbstractTemplate;
+use OWeb\log\module\Extension\Log;
 use OWeb\OWeb;
 
 /**
@@ -92,6 +93,8 @@ class Template extends AbstractTemplate
             OWeb::getInstance()->getManageController()->display();
         }catch(\Exception $e){
             //\OWeb\manage\Events::getInstance()->sendEvent('PrepareContent_Fail@OWeb\manage\Template');
+
+            OWeb::getInstance()->log($e, Log::LEVEL_ERROR);
 
             ob_end_clean();
             ob_start();

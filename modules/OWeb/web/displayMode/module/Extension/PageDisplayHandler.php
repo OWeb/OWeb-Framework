@@ -63,7 +63,6 @@ class PageDisplayHandler extends AbstractPageDisplayHandler
             $ctr->loadParams();
 
         } catch (\Exception $ex) {
-            print_r($ex);
             switch ($this->getMode()) {
                 case self::MODE_PAGE :
                 case self::MODE_PAGE_NO_TEMPLATE :

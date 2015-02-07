@@ -28,6 +28,7 @@ use OWeb\db\module\Model\PDOConnection;
 use OWeb\db\module\Model\Query\Comparison;
 use OWeb\db\module\Model\Query\Select;
 use OWeb\db\module\Model\Query\Where;
+use OWeb\Exception;
 use OWeb\types\Controller;
 use OWeb\types\utils\SimpleArray;
 
@@ -60,6 +61,8 @@ class ExampleHome extends Controller{
     protected function onDisplay()
     {
         $pdo = $this->getDataBaseConnection();
+
+        throw new Exception('toto');
 
     }
 

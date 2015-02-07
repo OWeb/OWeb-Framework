@@ -34,8 +34,6 @@ class Log extends Extension{
     const LEVEL_ERROR = 1;
     const LEVEL_NONE = 0;
 
-    private $settings = null;
-
     protected function init()
     {
     }
@@ -61,7 +59,11 @@ class Log extends Extension{
         }
 
         if ($file == null) {
-            $file = $settings->defaultFile;
+            if ($level == self::LEVEL_ERROR) {
+                $file = $settings->exceptionFile;
+            } else {
+                $file = $settings->defaultFile;
+            }
         }
 
         $logDir = $settings->path;
@@ -82,8 +84,13 @@ class Log extends Extension{
         $additional = array();
 
         if (is_object($msg)) {
-            $additional = explode("\n", print_r($msg, true));
-            $title = "PrintR result : ";
+            if ($msg instanceof \Exception) {
+                $title = "Exception : ";
+                $additional = explode("\n", $msg->__toString());
+            } else {
+                $additional = explode("\n", print_r($msg, true));
+                $title = "PrintR result : ";
+            }
         }
         else if (is_array($msg))
         {
@@ -96,10 +103,10 @@ class Log extends Extension{
 
         $title = "[$dateTime] [$logName] $title";
 
-        $this->logToFile($title, $logFile, $additional);
+        $this->writeLog($title, $logFile, $additional);
     }
 
-    protected function logToFile($title, $logFile, $additional = array()){
+    protected function writeLog($title, $logFile, $additional = array()){
         file_put_contents($logFile, $title."\n", FILE_APPEND);
 
         if (!empty($additional)) {

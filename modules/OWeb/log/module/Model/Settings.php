@@ -28,7 +28,7 @@ use OWeb\settings\module\Model\Setting;
 class Settings extends Setting{
 
     public $path = 'var/log/';
-    public $defaultFile = 'oweb';
-    public $exceptionFile = 'exception';
+    public $defaultFile = 'oweb-info';
+    public $exceptionFile = 'oweb-exception';
     public $logLevel = Log::LEVEL_ERROR;
 } 
