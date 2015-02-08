@@ -29,6 +29,13 @@ use OWeb\cache\file\module\Model\Settings;
 use OWeb\Exception;
 use OWeb\types\utils\File;
 
+/**
+ * Class FileCache
+ *
+ * @method AbstractCache getCacheHandler()
+ *
+ * @package OWeb\cache\file\module\Extension
+ */
 class FileCache extends AbstractCache{
 
     private $settings;
@@ -39,8 +46,8 @@ class FileCache extends AbstractCache{
     protected function ready()
     {
         $this->settings = new Settings();
-        File::mkDir($this->settings.'/'.'data');
-        File::mkDir($this->settings.'/'.'tags');
+        File::mkDir($this->settings->path.'/'.'data');
+        File::mkDir($this->settings->path.'/'.'tags');
     }
 
     /**
@@ -63,14 +70,14 @@ class FileCache extends AbstractCache{
         $dataCache->expireDate = time() + $ttl;
         $dataCache->tags = $tags;
 
-        file_put_contents($this->settings.'/data/'.$fileName, serialize($dataCache));
+        file_put_contents($this->settings->path.'/data/'.$fileName, serialize($dataCache));
 
         $this->loaded[$key] = $dataCache;
 
         if (!empty($tags)) {
             foreach ($tags as $tag) {
-                File::mkDir($this->settings.'/tags/'.$tag);
-                file_put_contents($this->settings.'/tags/'.$tag.'/'.$fileName, '');
+                File::mkDir($this->settings->path.'/tags/'.$tag);
+                file_put_contents($this->settings->path.'/tags/'.$tag.'/'.$fileName, '');
             }
         }
     }
@@ -90,9 +97,9 @@ class FileCache extends AbstractCache{
 
         $fileName = File::cleanFileName($key);
 
-        if (file_exists($this->settings.'/data/'.$fileName)) {
+        if (file_exists($this->settings->path.'/data/'.$fileName)) {
             /** @var Cache $data */
-            $data = unserialize(file_get_contents($this->settings.'/data/'.$fileName));
+            $data = unserialize(file_get_contents($this->settings->path.'/data/'.$fileName));
 
             if ($data->expireDate > time()) {
                 $this->loaded[$key] = $data;
@@ -152,13 +159,13 @@ class FileCache extends AbstractCache{
 
             $fileName = File::cleanFileName($key);
 
-            if (!unlink($this->settings.'/data/'.$fileName)) {
+            if (!unlink($this->settings->path.'/data/'.$fileName)) {
                 throw new Exception('Couln\'t delete cache. Issue with permissions !!');
             }
 
             if (!empty($data->tags)) {
                 foreach ($data->tags as $tag) {
-                    if (file_exists($this->settings.'/tags/'.$tag.'/'.$fileName)) {
+                    if (file_exists($this->settings->path.'/tags/'.$tag.'/'.$fileName)) {
                         if (!unlink($this->settings . '/tags/' . $tag . '/' . $fileName)) {
                             throw new Exception('Couln\'t delete cache tags. Issue with permissions !!');
                         }
@@ -213,7 +220,7 @@ class FileCache extends AbstractCache{
      * @return Cache
      */
     protected function loadByFileName($fileName) {
-        if (file_exists($this->settings.'/data/'.$fileName)) {
+        if (file_exists($this->settings->path.'/data/'.$fileName)) {
             /** @var Cache $data */
             return unserialize(file_get_contents($this->settings . '/data/' . $fileName));
         }
