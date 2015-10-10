@@ -23,6 +23,7 @@
 namespace OWeb\db\module\Extension;
 
 
+use GetOptionKit\OptionResult;
 use OWeb\console\module\Model\ConsoleExtension;
 use OWeb\db\module\Model\DBExtension;
 use OWeb\types\extension\Extension;
@@ -53,11 +54,18 @@ class Cmd  extends Extension {
     {
     }
 
-    public function testCmd() {
-        $this->initDbExtension();
-        $this->getReadConnection();
-        $this->getWriteConnection();
-        $this->getDbConnection(md5("__"));
-        $this->console('Done !!');
+    /**
+     * Check if can connect on a certain database.
+     *
+     * @param OptionResult $params
+     *   Parameters.
+     */
+    public function testCmd($params) {
+        if ($params->has('name')) {
+            $this->getDbConnection($params->keys['name']->value);
+        } else {
+            $this->getDbConnection(md5("__"));
+        }
+        $this->console('Sucess !!');
     }
 }
