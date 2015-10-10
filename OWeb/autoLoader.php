@@ -99,7 +99,7 @@ class AutoLoader
         try {
             $this->loadClass($class);
         } catch (\Exception $ex) {
-            throw new \OWeb\Exception("[AutoLoad]The class '$class' couldn't be loaded", 0, $ex);
+            // Do nothing perfectly normal another controller might load it.
         }
     }
 
@@ -114,6 +114,7 @@ class AutoLoader
     {
         $info = $this->getClassInfo($class);
 
+        // If core oweb content loading is sligtly different.
         if ($info->modulePath == null && !class_exists($class)) {
             if ($info->explodedName[0] == 'Page') {
                 $found = false;
@@ -144,7 +145,6 @@ class AutoLoader
                     //throw new Exception('[AutoLoad]The OWeb FrameWork class : ' . $class . ' couldn\'t be find at : ' . $path);
             }
         } else if(!class_exists($class)) {
-
             $found = false;
             foreach ($this->_modulePathes as $path) {
                 $file = $path . $info->modulePath . $info->relativePath . '.php';
@@ -158,7 +158,7 @@ class AutoLoader
             }
 
             if (!$found) {
-                //throw new Exception('[AutoLoad]The class : ' . $class . ' couldn\'t be find ');
+                throw new Exception('[AutoLoad]The class : ' . $class . ' couldn\'t be find ');
             }
         }
     }

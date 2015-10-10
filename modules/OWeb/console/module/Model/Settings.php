@@ -20,41 +20,32 @@
  *  along with this program.  If not, see {http://www.gnu.org/licenses/}.
  */
 
-namespace OWeb\db\module\Extension;
+namespace OWeb\console\module\Model;
 
-use OWeb\types\extension\Extension;
-use OWeb\utils\SimpleArray;
+use OWeb\settings\module\Model\Setting;
+use OWeb\settings\module\Model\SimpleXMLElement;
 
-abstract class AbstractConnection extends Extension{
+class Settings extends Setting {
+    /** @var array List of all modules that has a console to load.*/
+    public $extensions = array();
 
-    /** @var SimpleArray */
-    protected $connections;
-    protected $prefix;
-
-    protected function init() {
-    }
-
-    protected function ready()
+    /**
+     * Chanage the file loaded for the settings.
+     */
+    public function __construct()
     {
+        // The configuration is in another file.
+        parent::__construct();
+
+        $extensions = array();
+        if (!empty($this->extensions) && !empty($this->extensions->children())) {
+            foreach ($this->extensions->children() as $extension) {
+                $extensions[] = (string) $extension['name'];
+            }
+        }
+
+        $this->extensions = $extensions;
     }
 
-    /**
-     * @param string $name
-     *   The name of the connection to get. (Usefull if using write/read connection or multi databases.
-     *
-     * @return mixed
-     *   The connection to the database.
-     */
-    abstract public function getConnection($name = 'main');
 
-    /**
-     * Get the prefix of the table names (Some schemas may simply not use this)
-     *
-     * @return string
-     *    The prefix.
-     */
-    public function getPrefix(){
-        return $this->prefix;
-    }
-
-}
+} 

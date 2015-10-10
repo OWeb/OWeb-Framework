@@ -94,6 +94,7 @@ class Extension implements CoreEvents
 
         if (!isset($this->_extensions[$extensionName])) {
             $extension = $this->createExtension($extensionName);
+            $this->registerExtension($extension, $extensionName);
 
             if ($extension == false) {
                 return false;
@@ -102,8 +103,6 @@ class Extension implements CoreEvents
             } else {
                 $this->_toInitialize[] = $extension;
             }
-
-            $this->registerExtension($extension, $extensionName);
 
         } else if ($this->_initialized && !$this->_extensions[$extensionName]->isInitialized()) {
             $this->initExtension($this->_extensions[$extensionName]);

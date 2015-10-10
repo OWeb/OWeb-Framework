@@ -26,7 +26,7 @@ namespace OWeb\log\module\Extension;
 use OWeb\log\module\Model\Settings;
 use OWeb\OWeb;
 use OWeb\types\extension\Extension;
-use OWeb\types\utils\File;
+use OWeb\utils\File;
 
 class Log extends Extension{
 

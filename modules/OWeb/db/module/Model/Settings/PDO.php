@@ -22,17 +22,84 @@
 
 namespace OWeb\db\module\Model\Settings;
 
+use OWeb\settings\module\Model\Exception;
 use OWeb\settings\module\Model\Setting;
 use OWeb\settings\module\Model\SimpleXMLElement;
+use OWeb\utils\SimpleArray;
 
 class PDO extends Setting {
 
-    public $connection_type = 'mysql';
-    public $connection_host = 'localhost';
-    public $connection_dbName = '';
+    /** @var PDOSetting  */
+    protected $default;
 
-    public $auth_name = 'root';
-    public $auth_pwd = '';
-    public $prefix = '';
+    /** @var SimpleArray  */
+    protected $settings;
 
+    /** @var SimpleArray  */
+    protected $usages;
+
+    function __construct()
+    {
+        $this->settings = new SimpleArray();
+        $this->usages = new SimpleArray();
+
+        $this->default = null;
+
+        /** @var \SimpleXMLElement $settings */
+        $settings = $this->getRawSettings();
+
+
+        foreach ($settings->children() as $value){
+            /** @var \SimpleXMLElement $value */
+            if ( empty($value['name'])) {
+                throw new Exception('Database settings must contain a name : <connection name="...">');
+            }
+
+            $name = (string) $value['name'];
+
+            // If usage then we don't have settings to read.
+            if (!empty($value['use'])) {
+                $this->usages->set($name, (string) $value['use']);
+            }
+            else {
+                // We need to read the settings.
+                $setting = new PDOSetting($name, $value);
+                $this->settings->set($name, $setting);
+
+                if ($setting->isDefault()) {
+                    $this->default = $setting;
+                }
+            }
+        }
+
+        // Check all usages and check connections.
+        foreach ($this->usages->getData() as $name => $use) {
+            if (empty($this->settings->get($use))) {
+                throw new Exception("Database connection '$name' uses '$use' but the connection '$use' couldn't be found !");
+            }
+        }
+    }
+
+    /**
+     * @param $name
+     * @return PDOSetting
+     */
+    public function getSetting($name) {
+        return $this->settings->get($name);
+    }
+
+    /**
+     * @param $name
+     * @return PDOSetting
+     */
+    public function getUsage($name) {
+        return $this->usages->get($name);
+    }
+
+    /**
+     * @return PDOSetting
+     */
+    public function getDefault() {
+        return $this->default;
+    }
 } 

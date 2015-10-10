@@ -22,39 +22,42 @@
 
 namespace OWeb\db\module\Extension;
 
+
+use OWeb\console\module\Model\ConsoleExtension;
+use OWeb\db\module\Model\DBExtension;
 use OWeb\types\extension\Extension;
-use OWeb\utils\SimpleArray;
+use \OWeb\console\module\Model\Cmd as CmdDefinition;
 
-abstract class AbstractConnection extends Extension{
+class Cmd  extends Extension {
+    // The extension needs to add some console stuff.
+    use ConsoleExtension;
+    use DBExtension;
 
-    /** @var SimpleArray */
-    protected $connections;
-    protected $prefix;
+    /**
+     * Add Command to work with the database.
+     */
+    protected function init()
+    {
+        $this->initConsoleExtension();
 
-    protected function init() {
+        $cmd = new CmdDefinition($this, 'testCmd', 'Test the connection to a certain database');
+        $cmd->addOption('n|name?', 'The name of the database to connect to, if not default database.')
+            ->isa('String');
+        $this->addCmd('oweb:db:test', $cmd);
     }
 
+    /**
+     * Now that the system is ready let's see if we can run a command.
+     */
     protected function ready()
     {
     }
 
-    /**
-     * @param string $name
-     *   The name of the connection to get. (Usefull if using write/read connection or multi databases.
-     *
-     * @return mixed
-     *   The connection to the database.
-     */
-    abstract public function getConnection($name = 'main');
-
-    /**
-     * Get the prefix of the table names (Some schemas may simply not use this)
-     *
-     * @return string
-     *    The prefix.
-     */
-    public function getPrefix(){
-        return $this->prefix;
+    public function testCmd() {
+        $this->initDbExtension();
+        $this->getReadConnection();
+        $this->getWriteConnection();
+        $this->getDbConnection(md5("__"));
+        $this->console('Done !!');
     }
-
 }

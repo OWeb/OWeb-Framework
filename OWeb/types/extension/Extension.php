@@ -35,8 +35,6 @@ abstract class Extension
 
     private $_actions = array();
 
-    private $_aliases = array();
-
     protected $extension;
 
 
@@ -53,9 +51,11 @@ abstract class Extension
 
     final public function OWeb_Init()
     {
-        $this->init();
-
+        // First flag as initialized to prevent recursive initialization.
         $this->_initialized = true;
+
+        // Now init
+        $this->init();
 
         if (!empty($this->_dependence)) {
             foreach ($this->_dependence as $dep) {
@@ -87,6 +87,9 @@ abstract class Extension
      *
      * @param string $extension_name
      *
+     * @return Extension
+     *   The extension.
+     *
      * @throws \OWeb\Exception
      */
     protected function addDependance($extension_name)
@@ -100,34 +103,15 @@ abstract class Extension
 
             if ($ext) {
                 $this->dependence->push($ext);
+                return $ext;
             } else {
                 throw new Exception("The extension: " . $extension_name . " Couldn't be loaded. The extension " . get_class($this) . " needs it to work");
             }
         } catch (Exception $exception) {
             throw new Exception("The extension: " . $extension_name . " Couldn't be loaded. The extension " . get_class($this) . " needs it to work", 0, $exception);
         }
-    }
 
-
-    /**
-     * Handles call to alias functions to the extensions the controller depends on
-     *
-     * @param $name
-     * @param $arguments
-     *
-     * @return mixed
-     * @throws \OWeb\Exception
-     */
-    public function __call($name, $arguments)
-    {
-        for ($this->dependence->rewind(); $this->dependence->valid(); $this->dependence->next()) {
-            $current = $this->dependence->current();
-            $alias = $current->getAlias($name);
-            if ($alias != null) {
-                return call_user_func_array(array($current, $alias), $arguments);
-            }
-        }
-        throw new \OWeb\Exception("The function: " . $name . " doesen't exist and couldn't be find in any extension to whom the plugin depends", 0);
+        return null;
     }
 
     /**
@@ -188,16 +172,6 @@ abstract class Extension
     protected function initSettings()
     {
         $this->initRecSettings(get_class($this));
-    }
-
-    public function addAlias($aliasName, $funcName)
-    {
-        $this->_aliases[$aliasName] = $funcName;
-    }
-
-    public function getAlias($name)
-    {
-        return isset($this->_aliases[$name]) ? $this->_aliases[$name] : null;
     }
 
     public function isInitialized(){

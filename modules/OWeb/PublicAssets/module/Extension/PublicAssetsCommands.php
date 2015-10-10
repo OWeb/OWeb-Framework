@@ -20,41 +20,42 @@
  *  along with this program.  If not, see {http://www.gnu.org/licenses/}.
  */
 
-namespace OWeb\db\module\Extension;
+namespace OWeb\PublicAssets\module\Extension;
 
+use OWeb\console\module\Model\ConsoleExtension;
+use OWeb\OWeb;
 use OWeb\types\extension\Extension;
-use OWeb\utils\SimpleArray;
 
-abstract class AbstractConnection extends Extension{
+/**
+ * Install all the assets of the different modules.
+ *
+ * @package OWeb\console\module\Extension
+ */
+class PublicAssetsCommands extends Extension
+{
+    // The extension needs to add some console stuff.
+    use ConsoleExtension;
 
-    /** @var SimpleArray */
-    protected $connections;
-    protected $prefix;
+    protected $commands = array();
 
-    protected function init() {
+    /**
+     * Add Command to install assets.
+     */
+    protected function init()
+    {
+        $this->initConsoleExtension();
+        //$this->addCmd("oweb:asset:install", array($this, 'install'));
+
     }
 
+    /**
+     * Now that the system is ready let's see if we can run a command.
+     */
     protected function ready()
     {
     }
 
-    /**
-     * @param string $name
-     *   The name of the connection to get. (Usefull if using write/read connection or multi databases.
-     *
-     * @return mixed
-     *   The connection to the database.
-     */
-    abstract public function getConnection($name = 'main');
-
-    /**
-     * Get the prefix of the table names (Some schemas may simply not use this)
-     *
-     * @return string
-     *    The prefix.
-     */
-    public function getPrefix(){
-        return $this->prefix;
+    public function install() {
+        $this->console('Done !!');
     }
-
 }

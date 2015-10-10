@@ -22,36 +22,43 @@
 
 namespace OWeb;
 
-use OWeb\abs\displayMode\module\Extension\AbstractPageDisplayHandler;
 use OWeb\log\module\Extension\Log;
 use OWeb\manage\Controller;
 use OWeb\manage\Dispatcher;
 use OWeb\manage\Extension;
 use OWeb\manage\Settings;
 use OWeb\types\event\CoreEvents;
-use OWeb\types\utils\SimpleArray;
-use OWeb\web\displayMode\module\Extension\PageDisplayHandler;
+use OWeb\utils\SimpleArray;
 
 define('OWEB_DIR', __DIR__);
 
-define('OWEB_VERSION', '0.4.0');
+define('OWEB_VERSION', '0.5.0');
 
-if (!defined('OWEB_DIR_TEMPLATES')) define('OWEB_DIR_TEMPLATES', 'templates');
-
+// Path to put OWEB data into.
 if (!defined('OWEB_DIR_DATA')) define('OWEB_DIR_DATA', 'sources/data');
 
+// Path for OWebs configuration.
 if (!defined('OWEB_DIR_CONFIG')) define('OWEB_DIR_CONFIG', 'config');
 
-// Les Fichier pour le HTML par Default
-if (!defined('OWEB_HTML_DIR_CSS')) define('OWEB_HTML_DIR_CSS', 'sources/css');
-if (!defined('OWEB_HTML_DIR_JS')) define('OWEB_HTML_DIR_JS', 'sources/js');
+// Path to all public files.
+if (!defined('OWEB_HTML_DIR_PUBLIC')) define('OWEB_HTML_DIR_CSS', 'sources/');
 
-if (!defined('OWEB_HTML_URL_IMG')) define('OWEB_HTML_URL_IMG', 'sources/files');
+if (!defined('OWEB_NEW_LINE')) define('OWEB_NEW_LINE', "\n\r");
 
 /**
- * Including autoloader manually.
+ * Including OWebs autoloader manually.
  */
 require_once __DIR__ . '/autoLoader.php';
+
+/**
+ * Once oweb's autoloader is included include composer autoloader for the rest.
+ *
+ * OWebs autoloader has a multi level loading system & loads module related information as well,
+ * therefore it must be the one loading OWeb related classes.
+ *
+ * @TODO This method of inclusin might not be the best solution.
+ */
+require_once 'vendor/autoload.php';
 
 /**
  * The main OWeb class that runs the wheel of time and this the world
@@ -89,16 +96,6 @@ class OWeb
     private $_manageExtensions;
 
     /**
-     * @var AbstractPageDisplayHandler
-     */
-    private $_displayExtension;
-
-    /**
-     * @var Controller
-     */
-    private $_manageController;
-
-    /**
      * @var Log
      */
     private $_manageLogs;
@@ -121,7 +118,7 @@ class OWeb
      * @param array $server
      * @param array $adr
      */
-    public function __construct(&$get, &$post, &$files, &$cookies, &$server, $adr)
+    public function __construct(&$get, &$post = array(), &$files = array(), &$cookies = array(), &$server = array(), $adr = 'default')
     {
 
         self::$instance = $this;
@@ -131,6 +128,7 @@ class OWeb
          */
         $this->getRunTime();
 
+        // Start the autoloader with default paths.
         $this->_autoLoader = new AutoLoader();
         $this->_autoLoader->addModulePath(dirname(__DIR__) . '/modules');
         $this->_autoLoader->addPagePath(dirname(__DIR__) . '');
@@ -150,16 +148,23 @@ class OWeb
         $this->_server->makeReadOnly();
         $this->_adresse = $adr;
 
+        // The even manager will allo us to dispatch events for the core to work.
         $this->_manageEvents = new Dispatcher();
 
+        // Extensions is the heart of OWeb so need to menage to start working them out.
         $this->_manageExtensions = new Extension($this->_manageEvents);
 
-        $this->_manageController = new Controller($this->_manageEvents);
-
+        // We also need to load settings
         $this->_manageSettings = new Settings();
     }
 
-    public function init($mode = null)
+    /**
+     * Call this once you have altered autoloade or other settings to really start the magic.
+     *
+     * @param string $extensionToLoad
+     *   The extension to load as main extension (frontController/Console ...)
+     */
+    public function init($extensionToLoad = NULL)
     {
         $settings = $this->_manageSettings->loadMainSettings();
 
@@ -167,26 +172,28 @@ class OWeb
             foreach($settings->OWeb->extensions->extension as $extension){
                 $extensionStatus = $this->_manageExtensions->getExtension((string)$extension['name']);
                 if (!$extensionStatus) {
-                    $this->log("Extension in settings couldn't be loaded : '".(string)$extension['name']."'");
+                    die("Extension in settings couldn't be loaded : '".(string)$extension['name']);
                 }
             }
         }
 
-        $this->_displayExtension = $this->_manageExtensions->getExtension((string)$settings->OWeb->display->extension['name']);
-        if ($mode != null) {
-            $this->_displayExtension->setMode($mode);
-        }
-
+        // By default OWeb always loads a log Extension start it up now.
         $this->_manageLogs = $this->_manageExtensions->getExtension('OWeb\log','Log');
 
+        // Settings may override the extension to be loaded, therfore needs to be loaded last.
+        if (!empty($extensionToLoad)) {
+            $this->_manageExtensions->getExtension($extensionToLoad);
+        }
+
+        // Let the world now of the sucess.
         $this->_manageEvents->dispatchEvent(CoreEvents::name_OWeb_init);
     }
 
-    public function start()
-    {
-        $this->_displayExtension->display();
-    }
-
+    /**
+     * Get the run time of the oweb instance.
+     *
+     * @return int|mixed
+     */
     public function getRunTime()
     {
         static $a;
@@ -280,22 +287,6 @@ class OWeb
     }
 
     /**
-     * @return \OWeb\web\displayMode\module\Extension\PageDisplayHandler
-     */
-    public function getDisplayExtension()
-    {
-        return $this->_displayExtension;
-    }
-
-    /**
-     * @return \OWeb\manage\Controller
-     */
-    public function getManageController()
-    {
-        return $this->_manageController;
-    }
-
-    /**
      * @param \OWeb\manage\Settings $manageSettings
      */
     public function setManageSettings($manageSettings)
@@ -322,5 +313,4 @@ class OWeb
     {
         $this->_manageLogs->log($msg, $level, $file);
     }
-
 }

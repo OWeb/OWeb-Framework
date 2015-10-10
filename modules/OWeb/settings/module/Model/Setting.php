@@ -41,11 +41,28 @@ abstract class Setting{
 
     function __construct()
     {
+        /** @var SimpleXMLElement $settings */
+        $settings = $this->getRawSettings();
+
+        $this->applyRawSettings($settings);
+    }
+
+    /**
+     * Get settings raw.
+     *
+     * @return SimpleXMLElement
+     */
+    protected function getRawSettings() {
         /** @var Settings $settingsExt */
         $settingsExt = OWeb::getInstance()->getManageExtensions()->getExtension('OWeb\settings', 'Settings');
-        /** @var SimpleXMLElement $settings */
-        $settings = $settingsExt->getClassSetting($this);
+        return $settingsExt->getClassSetting($this);
+    }
 
+    /**
+     * @param SimpleXMLElement $settings
+     *    The settings to apply
+     */
+    protected function applyRawSettings($settings) {
         if ($settings != null){
             foreach ($settings->children() as $key => $value){
                 if (isset($this->$key)) {

@@ -40,14 +40,18 @@ class Settings extends Extension{
 
     }
 
-    public function getClassSetting($class){
+    public function getClassSetting($class, $fileName = null){
         if(is_object($class))
             $class = get_class($class);
 
         if(!isset($this->_classSettings[$class])){
             $path = AutoLoader::getInstance()->getClassInfo($class)->explodedName;
 
-            $settings = OWeb::getInstance()->getManageSettings()->loadMainSettings()->class;
+            if ($fileName) {
+                $settings = OWeb::getInstance()->getManageSettings()->loadFile($fileName)->class;
+            }else {
+                $settings = OWeb::getInstance()->getManageSettings()->loadMainSettings()->class;
+            }
             $currentLevel = $settings;
 
             foreach($path as $name){

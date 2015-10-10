@@ -25,36 +25,51 @@ namespace OWeb\db\module\Extension;
 
 use OWeb\db\module\Model\PDOConnection as Connection;
 use OWeb\db\module\Model\Settings\PDO as PDOSettings;
+use OWeb\db\module\Model\Settings\PDO;
+use OWeb\db\module\Model\Settings\PDOSetting;
+use OWeb\utils\SimpleArray;
 
 class PDOConnection extends AbstractConnection{
+
+    /** @var PDO */
+    protected $settings = null;
 
     /*
      * Creates a connection
      */
-    protected function startConnection() {
+    protected function startConnection($name = 'main')
+    {
 
-        $settings = new PDOSettings();
-
-        $this->prefix = $settings->prefix;
-
-        $con = ($settings->connection_type) . ':host=' . ($settings->connection_host) . ';dbname=' . ($settings->connection_dbName)."";
-        try{
-            $this->connection = new Connection(
-                $con,
-                ($settings->auth_name),
-                ($settings->auth_pwd)
-                , array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
-            );
-        }catch(\Exception $ex){
-            throw new \OWeb\Exception("Couldn't connect to DB : ".$con, 0, $ex);
+        if (is_null($this->settings)) {
+            $this->settings = PDO::getInstance();
         }
-        $this->done = true;
+
+        if (!empty($this->settings->getSetting($name))) {
+
+            $connection = Connection::initFromSetting($this->settings->getSetting($name));
+            $this->connections->set($name, $connection);
+
+        } else if (!empty($this->settings->getUsage($name))) {
+
+            $connection = $this->getConnection($this->settings->getUsage($name));
+            $this->connections->set($name, $connection);
+
+        } else {
+            $connection = $this->getConnection($this->settings->getDefault()->getName());
+            $this->connections->set($name, $connection);
+        }
     }
 
-    public function getConnection() {
-        //Si la connection n'a pas encore ete etablis faut le faire.
-        if (!$this->done)
-            $this->startConnection();
-        return $this->connection;
+    public function getConnection($name = 'main') {
+
+        if (is_null($this->connections)) {
+            $this->connections = new SimpleArray();
+        }
+
+        if (is_null($this->connections->get($name))) {
+            $this->startConnection($name);
+        }
+
+        return $this->connections->get($name);
     }
 }

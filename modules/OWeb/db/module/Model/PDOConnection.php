@@ -27,8 +27,19 @@ use OWeb\db\module\Model\Query\Comparison;
 use OWeb\db\module\Model\Query\Query;
 use OWeb\db\module\Model\Query\Select;
 use OWeb\db\module\Model\Query\Where;
+use OWeb\db\module\Model\Settings\PDOSetting;
 
 class PDOConnection extends \PDO{
+
+    protected $prefix;
+
+    /**
+     * @return mixed
+     */
+    public function getPrefix()
+    {
+        return $this->prefix;
+    }
 
     public function prepare ($statement, $driver_options = array()) {
         return parent::prepare($statement, $driver_options);
@@ -115,5 +126,38 @@ class PDOConnection extends \PDO{
             }
             return $expression->getColumn()." ".$expression->getOperator()." ".$value;
         }
+    }
+
+    /**
+     * Easily start a PDO connection.
+     *
+     * @param PDOSetting $setting
+     *   The settings to use
+     *
+     * @return PDOConnection
+     *   The established connection
+     *
+     * @throws \OWeb\Exception
+     *   If error while connecting
+     */
+    public static function initFromSetting(PDOSetting $setting) {
+        $con = ($setting->getType()) . ':host=' . ($setting->getHost()) . ';dbname=' . ($setting->getDbName())."";
+
+        echo $con;
+
+        try{
+            $connection = new PDOConnection(
+                $con,
+                ($setting->getAuthName()),
+                ($setting->getAuthPwd())
+                , array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
+            );
+
+            $connection->prefix = $setting->getPrefix();
+        }catch(\Exception $ex){
+            throw new \OWeb\Exception("Couldn't connect to DB : ".$con, 0, $ex);
+        }
+
+        return $connection;
     }
 } 

@@ -2,7 +2,8 @@
     "name": "oliverde8/oweb-framework",
     "description": "A simple yet powerful framework",
     "require": {
-        "php": ">=5.3.0"
+        "corneltek/getoptionkit": "~2",
+        "php": ">=5.5.0"
     },
     "authors": [
         {
