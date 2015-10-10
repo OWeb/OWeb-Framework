@@ -79,7 +79,7 @@ class Console extends Extension
         $cmd = new Cmd($this, 'notFound', '');
 
         /** @var Cmd $cmd */
-        $cmd = $this->commands->get($args->get(1, 'oweb:cmd:list'), array($this, $cmd));
+        $cmd = $this->commands->get($args->get(1, 'oweb:cmd:list'), $cmd);
 
         $cmd->execute($args);
     }
