@@ -32,6 +32,8 @@ use OWeb\utils\SimpleArray;
 
 define('OWEB_DIR', __DIR__);
 
+define('OWEB_FRAMEWORK_DIR',dirname( __DIR__));
+
 define('OWEB_VERSION', '0.5.0');
 
 // Path to put OWEB data into.
